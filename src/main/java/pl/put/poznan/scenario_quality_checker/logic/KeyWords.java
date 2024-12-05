@@ -1,4 +1,4 @@
-package pl.put.poznan.checker.logic;
+package pl.put.poznan.scenario_quality_checker.logic;
 
 import java.util.HashSet;
 import java.util.Set;
