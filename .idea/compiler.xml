@@ -6,8 +6,14 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+<<<<<<< HEAD
         <module name="scenario-quality-checker" />
         <module name="io-project-architecture" />
+||||||| e21ad3e
+        <module name="ioprojectarchitecture" />
+=======
+        <module name="io-project-architecture" />
+>>>>>>> origin/adam
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -16,8 +22,15 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+<<<<<<< HEAD
       <module name="scenario-quality-checker" options="-parameters" />
       <module name="io-project-architecture" options="-parameters" />
+||||||| e21ad3e
+      <module name="ioprojectarchitecture" options="-parameters" />
+=======
+      <module name="io-project-architecture" options="-parameters" />
+      <module name="ioprojectarchitecture" options="-parameters" />
+>>>>>>> origin/adam
     </option>
   </component>
 </project>
