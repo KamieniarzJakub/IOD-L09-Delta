@@ -1,12 +1,16 @@
 package pl.put.poznan.scenario_quality_checker.logic.ScenarioObjects;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class IterativeStep extends SimpleStep {
     @JsonProperty("FOR EACH") // Mapuje na klucz JSON "FOR EACH"
     private String loopVariable; // Zmienna iteracyjna
     private List<SimpleStep> steps; // Lista kroków wewnętrznych
+
+    public IterativeStep() { }
 
     // Konstruktor
     public IterativeStep(String description, String loopVariable, List<SimpleStep> steps) {

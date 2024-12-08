@@ -1,7 +1,12 @@
 package pl.put.poznan.scenario_quality_checker.logic.ScenarioObjects;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class SimpleStep {
     private String description; // Opis kroku
+
+    public SimpleStep() { }
 
     // Konstruktor
     public SimpleStep(String description) {

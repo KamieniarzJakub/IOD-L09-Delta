@@ -5,7 +5,7 @@ import java.util.List;
 public class Scenario {
     private String title;
     private Actors actors;
-    private List<Object> steps; // Kroki mogą być tekstem lub kolejną strukturą IF/FOR EACH
+    private List<SimpleStep> steps; // Kroki mogą być tekstem lub kolejną strukturą IF/FOR EACH
 
     // Gettery i Settery
     public String getTitle() {
@@ -22,10 +22,10 @@ public class Scenario {
         this.actors = actors;
     }
 
-    public List<Object> getSteps() {
+    public List<SimpleStep> getSteps() {
         return steps;
     }
-    public void setSteps(List<Object> steps) {
+    public void setSteps(List<SimpleStep> steps) {
         this.steps = steps;
     }
 }

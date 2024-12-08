@@ -1,13 +1,17 @@
 package pl.put.poznan.scenario_quality_checker.logic.ScenarioObjects;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ConditionalStep extends SimpleStep {
     @JsonProperty("IF") // Mapuje na klucz JSON "IF"
     private String condition; // Warunek IF
     private List<SimpleStep> steps; // Lista kroków wewnętrznych
+
+    public ConditionalStep() { }
 
     // Konstruktor
     public ConditionalStep(String description, String condition, List<SimpleStep> steps) {
