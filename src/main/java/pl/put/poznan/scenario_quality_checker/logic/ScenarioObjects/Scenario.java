@@ -4,7 +4,8 @@ import java.util.List;
 
 public class Scenario {
     private String title;
-    private Actors actors;
+    private List<Actor> externalActors;
+    private List<Actor> systemActors ;
     private List<SimpleStep> steps; // Kroki mogą być tekstem lub kolejną strukturą IF/FOR EACH
 
     // Gettery i Settery
@@ -15,18 +16,27 @@ public class Scenario {
         this.title = title;
     }
 
-    public Actors getActors() {
-        return actors;
-    }
-    public void setActors(Actors actors) {
-        this.actors = actors;
-    }
-
     public List<SimpleStep> getSteps() {
         return steps;
     }
     public void setSteps(List<SimpleStep> steps) {
         this.steps = steps;
+    }
+
+    public List<Actor> getExternalActors() {
+        return externalActors;
+    }
+
+    public void setExternalActors(List<Actor> externalActors) {
+        this.externalActors = externalActors;
+    }
+
+    public List<Actor> getSystemActors() {
+        return systemActors;
+    }
+
+    public void setSystemActors(List<Actor> systemActors) {
+        this.systemActors = systemActors;
     }
 }
 

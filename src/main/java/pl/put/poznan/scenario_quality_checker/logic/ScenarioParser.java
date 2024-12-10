@@ -22,10 +22,16 @@ public class ScenarioParser {
             scenario.setTitle((String) rawData.get("title"));
 
             Map<String, List<String>> rawActors = (Map<String, List<String>>) rawData.get("actors");
-            Actors actors = new Actors();
-            actors.setExternal(rawActors.get("external"));
-            actors.setSystem(rawActors.get("system"));
-            scenario.setActors(actors);
+            List<Actor> externalActors = new java.util.ArrayList<>(List.of());
+            List<Actor> systemActors = new java.util.ArrayList<>(List.of());
+            for (String rawExternalActor : rawActors.get("external")){
+                externalActors.add(new Actor(Actor.ActorType.EXTERNAL,rawExternalActor));
+            }
+            for (String rawSystemActor : rawActors.get("system")){
+                systemActors.add(new Actor(Actor.ActorType.EXTERNAL,rawSystemActor));
+            }
+            scenario.setExternalActors(externalActors);
+            scenario.setSystemActors(systemActors);
 
             // Parsowanie kroków
             List<?> rawSteps = (List<?>) rawData.get("steps");
@@ -33,8 +39,8 @@ public class ScenarioParser {
             scenario.setSteps(parsedSteps);
 
             System.out.println("Tytuł: " + scenario.getTitle());
-            System.out.println("Aktorzy: " + String.join(", ", scenario.getActors().getExternal()));
-            System.out.println("Aktor systemowy: " + String.join(", ", scenario.getActors().getSystem()));
+            System.out.println("Aktorzy: " + String.join(", ", parseActors(scenario.getExternalActors())));
+            System.out.println("Aktor systemowy: " + String.join(", ", parseActors(scenario.getSystemActors())));
             System.out.println();
 
             // Printowanie kroków kolejno
@@ -44,6 +50,13 @@ public class ScenarioParser {
         }
     }
 
+
+    /**
+     * Funkcja przetwarzająca listę aktorów
+     */
+    private static List<String> parseActors(List<Actor> actors){
+        return actors.stream().map(Actor::getName).collect(Collectors.toList());
+    }
 
     /**
      * Funkcja przetwarzająca listę kroków.
