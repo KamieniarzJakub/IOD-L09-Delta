@@ -4,7 +4,22 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ddec5298-a09c-455a-9c39-fa30be24617d" name="Default" comment="" />
+    <list default="true" id="ddec5298-a09c-455a-9c39-fa30be24617d" name="Default" comment="remove .idea junk">
+      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/InputData/SampleJSON.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/InputData/SampleScenario.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/pl/put/poznan/scenario_quality_checker/logic/ScenarioObjects/Actors.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/pl/put/poznan/scenario_quality_checker/logic/ScenarioObjects/ConditionalStep.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/pl/put/poznan/scenario_quality_checker/logic/ScenarioObjects/IterativeStep.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/pl/put/poznan/scenario_quality_checker/logic/ScenarioObjects/Scenario.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/pl/put/poznan/scenario_quality_checker/logic/ScenarioObjects/SimpleStep.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/put/poznan/scenario_quality_checker/logic/KeyWords.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/put/poznan/scenario_quality_checker/logic/KeyWords.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -44,26 +59,34 @@
     <option name="height" value="877" />
   </component>
   <component name="ProjectId" id="1ky6jafGVWRXBPEvTgdAJgYNqlu" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.ScenarioQualityCheckerApplication.executor&quot;: &quot;Run&quot;,
-    &quot;Application.TextTransformerApplication.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/niebieskirekin/Dokumenty/Studia/semestr_5/IO/ioprojectarchitecture&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.ScenarioQualityCheckerApplication.executor": "Run",
+    "Application.TextTransformerApplication.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "Kamieniarz",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/kamie/Projekty/IO (Github)/ScenarioChecker",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
-  <component name="RunManager">
+}]]></component>
+  <component name="RunManager" selected="Application.ScenarioQualityCheckerApplication">
     <configuration default="true" type="Applet" factoryName="Applet">
       <option name="HTML_USED" value="false" />
       <option name="WIDTH" value="400" />
@@ -105,6 +128,24 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="scenario-quality-checker" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="scenario-quality-checker" />
+      <option name="filePath" />
+      <method v="2" />
+    </configuration>
+    <configuration name="ScenarioQualityCheckerApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="scenario-quality-checker" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="pl.put.poznan.scenario_quality_checker.app.ScenarioQualityCheckerApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration default="true" type="TestNG">
       <option name="TEST_OBJECT" value="CLASS" />
       <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
@@ -120,6 +161,14 @@
       </list>
     </recent_temporary>
   </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.24807.4" />
+        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.24807.4" />
+      </set>
+    </attachedChunks>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -130,6 +179,7 @@
       <updated>1513022379114</updated>
       <workItem from="1513022386137" duration="6468000" />
       <workItem from="1513093084300" duration="8069000" />
+      <workItem from="1733435081058" duration="1156000" />
     </task>
     <task id="LOCAL-00001" summary="downgrade java version for actions">
       <option name="closed" value="true" />
@@ -147,36 +197,18 @@
       <option name="project" value="LOCAL" />
       <updated>1733430265517</updated>
     </task>
-    <task id="LOCAL-00003" summary="rename default project name to ScenarioQualityChecker">
-      <option name="closed" value="true" />
-      <created>1733430754357</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1733430754357</updated>
-    </task>
-    <task id="LOCAL-00004" summary="update dependencies">
-      <option name="closed" value="true" />
-      <created>1733430778092</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1733430778092</updated>
-    </task>
-    <option name="localTasksCounter" value="5" />
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
     <option name="totallyTimeSpent" value="14537000" />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="1" />
+    <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="downgrade java version for actions" />
     <MESSAGE value="remove .idea junk" />
-    <MESSAGE value="rename default project name to ScenarioQualityChecker" />
-    <MESSAGE value="update dependencies" />
-    <option name="LAST_COMMIT_MESSAGE" value="update dependencies" />
+    <option name="LAST_COMMIT_MESSAGE" value="remove .idea junk" />
   </component>
 </project>
