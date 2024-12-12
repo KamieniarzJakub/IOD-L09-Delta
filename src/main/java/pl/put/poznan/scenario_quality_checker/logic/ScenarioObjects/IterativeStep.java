@@ -2,6 +2,8 @@ package pl.put.poznan.scenario_quality_checker.logic.ScenarioObjects;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import pl.put.poznan.scenario_quality_checker.logic.StepVisitor;
+
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -35,5 +37,10 @@ public class IterativeStep extends SimpleStep {
 
     public void setSteps(List<SimpleStep> steps) {
         this.steps = steps;
+    }
+
+    @Override
+    public void accept(StepVisitor visitor) {
+        visitor.visit(this);
     }
 }

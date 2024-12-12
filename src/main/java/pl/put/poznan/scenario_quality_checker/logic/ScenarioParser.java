@@ -45,6 +45,23 @@ public class ScenarioParser {
 
             // Printowanie kroków kolejno
             printSteps(scenario.getSteps(), "");
+
+            // Użycie wizytatora - liczenie głównych kroków
+            ScenarioStepCounter mainStepCounter = new ScenarioStepCounter(false);
+            for (SimpleStep step : scenario.getSteps()) {
+                step.accept(mainStepCounter);
+            }
+            System.out.println("Liczba głównych kroków: " + mainStepCounter.getStepCount());
+
+            // Użycie wizytatora - liczenie wszystkich kroków, w tym podkroków
+            ScenarioStepCounter allStepCounter = new ScenarioStepCounter(true);
+            for (SimpleStep step : scenario.getSteps()) {
+                step.accept(allStepCounter);
+            }
+            System.out.println("Liczba wszystkich kroków (w tym podkroków): " + allStepCounter.getStepCount());
+
+
+
         } catch (IOException e) {
             e.printStackTrace();
         }
