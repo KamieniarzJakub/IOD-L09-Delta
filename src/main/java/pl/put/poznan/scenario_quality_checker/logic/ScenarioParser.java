@@ -5,73 +5,69 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ScenarioParser {
 
-    public static void main(String[] args) {
-        try {
-            ObjectMapper mapper = new ObjectMapper();
+    public static Scenario parseScenarioFromFile(String path) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
 
-            // Wczytanie JSONa
-            Map<String, Object> rawData = mapper.readValue(new File("InputData/sample_scenario_with_else.json"), Map.class);
+        // Wczytanie JSONa
+        Map<String, Object> rawData = mapper.readValue(new File(path), Map.class);
 
-            Scenario scenario = new Scenario();
-            scenario.setTitle((String) rawData.get("title"));
+        Scenario scenario = new Scenario();
+        scenario.setTitle((String) rawData.get("title"));
 
-            Map<String, List<String>> rawActors = (Map<String, List<String>>) rawData.get("actors");
-            List<Actor> externalActors = new java.util.ArrayList<>(List.of());
-            List<Actor> systemActors = new java.util.ArrayList<>(List.of());
-            for (String rawExternalActor : rawActors.get("external")){
-                externalActors.add(new Actor(Actor.ActorType.EXTERNAL,rawExternalActor));
-            }
-            for (String rawSystemActor : rawActors.get("system")){
-                systemActors.add(new Actor(Actor.ActorType.EXTERNAL,rawSystemActor));
-            }
-            scenario.setExternalActors(externalActors);
-            scenario.setSystemActors(systemActors);
-
-            // Parsowanie kroków
-            List<?> rawSteps = (List<?>) rawData.get("steps");
-            List<SimpleStep> parsedSteps = parseSteps(rawSteps);
-            scenario.setSteps(parsedSteps);
-
-            System.out.println("Tytuł: " + scenario.getTitle());
-            System.out.println("Aktorzy: " + String.join(", ", parseActors(scenario.getExternalActors())));
-            System.out.println("Aktor systemowy: " + String.join(", ", parseActors(scenario.getSystemActors())));
-            System.out.println();
-
-            // Printowanie kroków kolejno
-            printSteps(scenario.getSteps(), "");
-
-            // Użycie wizytatora - liczenie głównych kroków
-            ScenarioStepCounter mainStepCounter = new ScenarioStepCounter(false);
-            for (SimpleStep step : scenario.getSteps()) {
-                step.accept(mainStepCounter);
-            }
-            System.out.println("Liczba głównych kroków: " + mainStepCounter.getStepCount());
-
-            // Użycie wizytatora - liczenie wszystkich kroków, w tym podkroków
-            ScenarioStepCounter allStepCounter = new ScenarioStepCounter(true);
-            for (SimpleStep step : scenario.getSteps()) {
-                step.accept(allStepCounter);
-            }
-            System.out.println("Liczba wszystkich kroków (w tym podkroków): " + allStepCounter.getStepCount());
-
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
+        Map<String, List<String>> rawActors = (Map<String, List<String>>) rawData.get("actors");
+        List<Actor> externalActors = new java.util.ArrayList<>(List.of());
+        List<Actor> systemActors = new java.util.ArrayList<>(List.of());
+        for (String rawExternalActor : rawActors.get("external")) {
+            externalActors.add(new Actor(Actor.ActorType.EXTERNAL, rawExternalActor));
         }
+        for (String rawSystemActor : rawActors.get("system")) {
+            systemActors.add(new Actor(Actor.ActorType.EXTERNAL, rawSystemActor));
+        }
+        scenario.setExternalActors(externalActors);
+        scenario.setSystemActors(systemActors);
+
+        // Parsowanie kroków
+        List<?> rawSteps = (List<?>) rawData.get("steps");
+        List<SimpleStep> parsedSteps = parseSteps(rawSteps);
+        scenario.setSteps(parsedSteps);
+
+        System.out.println("Tytuł: " + scenario.getTitle());
+        System.out.println("Aktorzy: " + String.join(", ", parseActors(scenario.getExternalActors())));
+        System.out.println("Aktor systemowy: " + String.join(", ", parseActors(scenario.getSystemActors())));
+        System.out.println();
+
+        // Printowanie kroków kolejno
+        printSteps(scenario.getSteps(), "");
+
+        // Użycie wizytatora - liczenie głównych kroków
+        ScenarioStepCounter mainStepCounter = new ScenarioStepCounter(false);
+        for (SimpleStep step : scenario.getSteps()) {
+            step.accept(mainStepCounter);
+        }
+        System.out.println("Liczba głównych kroków: " + mainStepCounter.getStepCount());
+
+        // Użycie wizytatora - liczenie wszystkich kroków, w tym podkroków
+        ScenarioStepCounter allStepCounter = new ScenarioStepCounter(true);
+        for (SimpleStep step : scenario.getSteps()) {
+            step.accept(allStepCounter);
+        }
+        System.out.println("Liczba wszystkich kroków (w tym podkroków): " + allStepCounter.getStepCount());
+
+        return scenario;
     }
 
 
     /**
      * Funkcja przetwarzająca listę aktorów
      */
-    private static List<String> parseActors(List<Actor> actors){
+    private static List<String> parseActors(List<Actor> actors) {
         return actors.stream().map(Actor::getName).collect(Collectors.toList());
     }
 

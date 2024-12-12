@@ -1,4 +1,4 @@
-package pl.put.poznan.scenario_quality_checker.controller;
+package pl.put.poznan.scenario_quality_checker.rest;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
