@@ -60,6 +60,10 @@ public class ScenarioParser {
         }
         System.out.println("Liczba wszystkich kroków (w tym podkroków): " + allStepCounter.getStepCount());
 
+        ConditionalStepCounter conditionCunter = new ConditionalStepCounter();
+
+        System.out.println("Liczba wszystkich kroków warunkowych: " + conditionCunter.countConditionalSteps(scenario));
+
         return scenario;
     }
 
