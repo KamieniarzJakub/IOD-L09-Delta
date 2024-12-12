@@ -2,14 +2,18 @@ package pl.put.poznan.scenario_quality_checker.logic.ScenarioObjects;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import pl.put.poznan.scenario_quality_checker.logic.StepVisitor;
 
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonPropertyOrder({ "description", "FOR EACH", "steps" })  // Definiuje kolejność pól
 public class IterativeStep extends SimpleStep {
     @JsonProperty("FOR EACH") // Mapuje na klucz JSON "FOR EACH"
     private String loopVariable; // Zmienna iteracyjna
+
+    @JsonProperty("steps")
     private List<SimpleStep> steps; // Lista kroków wewnętrznych
 
     public IterativeStep() { }
