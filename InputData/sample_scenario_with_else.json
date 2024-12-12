@@ -2,7 +2,8 @@
     "title": "Dodanie książki",
     "actors": {
         "external": [
-            "Bibliotekarz"
+            "Bibliotekarz",
+            "Testowy"
         ],
         "system": [
             "System"

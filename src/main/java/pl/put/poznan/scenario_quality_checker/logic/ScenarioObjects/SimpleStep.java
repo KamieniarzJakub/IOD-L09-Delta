@@ -1,6 +1,7 @@
 package pl.put.poznan.scenario_quality_checker.logic.ScenarioObjects;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import pl.put.poznan.scenario_quality_checker.logic.StepVisitor;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SimpleStep {
@@ -20,5 +21,8 @@ public class SimpleStep {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+    public void accept(StepVisitor visitor) {
+        visitor.visit(this);
     }
 }
