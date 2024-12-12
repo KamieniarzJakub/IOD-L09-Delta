@@ -27,7 +27,7 @@
                     ]
                 },
                 {
-                    "ELSE": "Marek Marek",
+                    "IF": "Marek Marek",
                     "steps": [
                         "elo elo",
                         "maro maro"
