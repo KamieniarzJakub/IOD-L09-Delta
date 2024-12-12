@@ -142,4 +142,33 @@ public class ScenarioParser {
         }
     }
 
+    public static Scenario parseScenarioFromString(String jsonContent) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, Object> rawData = mapper.readValue(jsonContent, Map.class);
+        return createScenarioFromData(rawData);
+    }
+
+    private static Scenario createScenarioFromData(Map<String, Object> rawData) {
+        Scenario scenario = new Scenario();
+        scenario.setTitle((String) rawData.get("title"));
+
+        Map<String, List<String>> rawActors = (Map<String, List<String>>) rawData.get("actors");
+        List<Actor> externalActors = rawActors.get("external").stream()
+                .map(actor -> new Actor(Actor.ActorType.EXTERNAL, actor))
+                .collect(Collectors.toList());
+
+        List<Actor> systemActors = rawActors.get("system").stream()
+                .map(actor -> new Actor(Actor.ActorType.SYSTEM, actor))
+                .collect(Collectors.toList());
+
+        scenario.setExternalActors(externalActors);
+        scenario.setSystemActors(systemActors);
+
+        List<?> rawSteps = (List<?>) rawData.get("steps");
+        List<SimpleStep> parsedSteps = parseSteps(rawSteps);
+        scenario.setSteps(parsedSteps);
+
+        return scenario;
+    }
+
 }
