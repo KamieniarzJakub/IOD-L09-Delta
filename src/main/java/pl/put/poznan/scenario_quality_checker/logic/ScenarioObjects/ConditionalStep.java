@@ -8,8 +8,7 @@ import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ConditionalStep extends SimpleStep {
-    @JsonProperty("IF") // Mapuje na klucz JSON "IF"
-    private String condition; // Warunek IF
+    private String condition; // Warunek IF lub ELSE
     private List<SimpleStep> steps; // Lista kroków wewnętrznych
 
     public ConditionalStep() { }
@@ -21,7 +20,23 @@ public class ConditionalStep extends SimpleStep {
         this.steps = steps;
     }
 
+    /**
+     * Dynamiczne mapowanie JSON słowa kluczowego
+     */
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    public String getConditionalType() {
+        if (super.getDescription() != null) {
+            if (super.getDescription().toUpperCase().startsWith("IF")) {
+                return "IF";
+            } else if (super.getDescription().toUpperCase().startsWith("ELSE")) {
+                return "ELSE";
+            }
+        }
+        return "";
+    }
+
     // Getter i Setter dla pola `condition`
+    @JsonProperty("condition")
     public String getCondition() {
         return condition;
     }
@@ -31,6 +46,7 @@ public class ConditionalStep extends SimpleStep {
     }
 
     // Getter i Setter dla pola `steps`
+    @JsonProperty("steps")
     public List<SimpleStep> getSteps() {
         return steps;
     }
