@@ -1,22 +1,28 @@
-package pl.put.poznan.scenario_quality_checker.logic;
+package pl.put.poznan.scenario_quality_checker.rest;
 
 import pl.put.poznan.scenario_quality_checker.logic.ScenarioObjects.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class ScenarioParser {
+@RestController
+@RequestMapping("/api")
+public class ScenarioOut {
 
-    public static void main(String[] args) {
+    @GetMapping("/parse-scenario")
+    public List<String> getParsedScenario(@RequestParam String filePath) {
+        List<String> outputLogs = new ArrayList<>();
         try {
             ObjectMapper mapper = new ObjectMapper();
 
             // Wczytanie JSONa
-            Map<String, Object> rawData = mapper.readValue(new File("InputData/sample_scenario_with_else.json"), Map.class);
+            Map<String, Object> rawData = mapper.readValue(new File(filePath), Map.class);
 
             Scenario scenario = new Scenario();
             scenario.setTitle((String) rawData.get("title"));
@@ -32,64 +38,61 @@ public class ScenarioParser {
             List<SimpleStep> parsedSteps = parseSteps(rawSteps);
             scenario.setSteps(parsedSteps);
 
-            System.out.println("Tytuł: " + scenario.getTitle());
-            System.out.println("Aktorzy: " + String.join(", ", scenario.getActors().getExternal()));
-            System.out.println("Aktor systemowy: " + String.join(", ", scenario.getActors().getSystem()));
-            System.out.println();
+            outputLogs.add("Tytuł: " + scenario.getTitle());
+            outputLogs.add("Aktorzy: " + String.join(", ", scenario.getActors().getExternal()));
+            outputLogs.add("Aktor systemowy: " + String.join(", ", scenario.getActors().getSystem()));
+            outputLogs.add("");
 
             // Printowanie kroków kolejno
-            printSteps(scenario.getSteps(), "");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+            printSteps(scenario.getSteps(), "", outputLogs);
 
+        } catch (IOException e) {
+            outputLogs.add("Błąd podczas przetwarzania pliku: " + e.getMessage());
+        }
+        return outputLogs;
+    }
 
     /**
      * Funkcja przetwarzająca listę kroków.
      */
     private static List<SimpleStep> parseSteps(List<?> steps) {
         return steps.stream()
-                .map(ScenarioParser::parseStep)
+                .map(ScenarioOut::parseStep)
                 .collect(Collectors.toList());
     }
-
 
     /**
      * Funkcja przetwarzająca pojedynczy krok.
      */
     private static SimpleStep parseStep(Object step) {
-        if (step instanceof SimpleStep) { // Taki step już istnieje jako obiekt SimpleStep
+        if (step instanceof SimpleStep) {
             return (SimpleStep) step;
-        } else if (step instanceof String) { //Tworzy nowego SimpleStepa
+        } else if (step instanceof String) {
             return new SimpleStep((String) step);
-        } else if (step instanceof Map) { // Natknięcie się na {} w steps
+        } else if (step instanceof Map) {
             Map<?, ?> stepMap = (Map<?, ?>) step;
 
-            if (stepMap.containsKey("IF")) { //Tworzenie ConditionalStepu IFa
+            if (stepMap.containsKey("IF")) {
                 String condition = (String) stepMap.get("IF");
                 List<SimpleStep> innerSteps = parseSteps((List<?>) stepMap.get("steps"));
                 return new ConditionalStep("IF: " + condition, condition, innerSteps);
-            } else if (stepMap.containsKey("FOR EACH")) { //Tworzenie IterativeStepu FOR EACHa
+            } else if (stepMap.containsKey("FOR EACH")) {
                 String loopVariable = (String) stepMap.get("FOR EACH");
                 List<SimpleStep> innerSteps = parseSteps((List<?>) stepMap.get("steps"));
                 return new IterativeStep("FOR EACH: " + loopVariable, loopVariable, innerSteps);
-            } else if (stepMap.containsKey("ELSE")) { //Tworzenie ConditionalStepu ELSa
+            } else if (stepMap.containsKey("ELSE")) {
                 String loopVariable = (String) stepMap.get("ELSE");
                 List<SimpleStep> innerSteps = parseSteps((List<?>) stepMap.get("steps"));
                 return new ConditionalStep("ELSE: " + loopVariable, loopVariable, innerSteps);
             }
         }
-
-        // Obsługa błędnego formatu JSON
         throw new IllegalArgumentException("Nieoczekiwany format kroku: " + step);
     }
-
 
     /**
      * Funkcja printująca tak jak w przykładzie
      */
-    private static void printSteps(List<SimpleStep> steps, String prefix) {
+    private static void printSteps(List<SimpleStep> steps, String prefix, List<String> outputLogs) {
         if (steps == null) return;
 
         int stepCounter = 1;
@@ -99,40 +102,16 @@ public class ScenarioParser {
 
             if (step instanceof ConditionalStep) {
                 ConditionalStep condStep = (ConditionalStep) step;
-                System.out.println(currentPrefix + ". " + condStep.getDescription());
-                printSteps(condStep.getSteps(), "\t" + currentPrefix); // Ciągnięcie dalej tego ConditionalStepów
+                outputLogs.add(currentPrefix + ". " + condStep.getDescription());
+                printSteps(condStep.getSteps(), "\t" + currentPrefix, outputLogs);
             } else if (step instanceof IterativeStep) {
                 IterativeStep iterStep = (IterativeStep) step;
-                System.out.println(currentPrefix + ". " + iterStep.getDescription());
-                printSteps(iterStep.getSteps(), "\t" + currentPrefix); // Ciągnięcie dalej tego IterativeStepów
+                outputLogs.add(currentPrefix + ". " + iterStep.getDescription());
+                printSteps(iterStep.getSteps(), "\t" + currentPrefix, outputLogs);
             } else {
-                System.out.println(currentPrefix + ". " + step.getDescription()); // Zwykły Stepik B)
+                outputLogs.add(currentPrefix + ". " + step.getDescription());
             }
             stepCounter++;
         }
     }
-
-    public static Scenario parseScenarioFromFile(String filePath) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-
-        // Wczytanie JSONa
-        Map<String, Object> rawData = mapper.readValue(new File(filePath), Map.class);
-
-        Scenario scenario = new Scenario();
-        scenario.setTitle((String) rawData.get("title"));
-
-        Map<String, List<String>> rawActors = (Map<String, List<String>>) rawData.get("actors");
-        Actors actors = new Actors();
-        actors.setExternal(rawActors.get("external"));
-        actors.setSystem(rawActors.get("system"));
-        scenario.setActors(actors);
-
-        // Parsowanie kroków
-        List<?> rawSteps = (List<?>) rawData.get("steps");
-        List<SimpleStep> parsedSteps = parseSteps(rawSteps);
-        scenario.setSteps(parsedSteps);
-
-        return scenario;
-    }
-
 }
