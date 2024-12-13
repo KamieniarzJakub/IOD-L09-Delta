@@ -1,7 +1,10 @@
 package pl.put.poznan.scenario_quality_checker.logic.ScenarioObjects;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import pl.put.poznan.scenario_quality_checker.logic.ScenarioSerializer;
 import java.util.List;
 
+@JsonSerialize(using = ScenarioSerializer.class)
 public class Scenario {
     private String title;
     private List<Actor> externalActors;
