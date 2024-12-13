@@ -67,4 +67,18 @@ public class ConditionalStep implements Step {
     public void accept(StepVisitor visitor) {
         visitor.visit(this);
     }
+
+    @Override
+    public boolean equals(Object obj){
+        if (this == obj){
+            return true;
+        }
+        if (obj == null){
+            return false;
+        }
+        if (getClass() != obj.getClass())
+            return false;
+        ConditionalStep other = (ConditionalStep) obj;
+        return conditionalType.equals(other.conditionalType) && condition.equals(other.condition) && steps.equals(other.steps);
+    }
 }
