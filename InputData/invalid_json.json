@@ -1,0 +1,14 @@
+{
+    "scenario": "Dodanie książki",
+    "actors": {
+        "external": "Bibliotekarz",
+        "system": null
+    },
+    "steps": [
+        {"description":"Bibliotekarz wybiera opcje dodania nowej pozycji książkowej."},
+        {"description":"System wyświetla się formularz."},
+        {"description":"Bibliotekarz podaje dane książki."},
+        {"description":"Bibliotekarz zatwierdza dodanie książki."},
+        {"description":"System informuje o poprawnym dodaniu książki."}
+    ]
+}

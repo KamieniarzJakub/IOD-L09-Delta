@@ -57,4 +57,16 @@ class ScenarioParserTest {
         assertEquals(expected1,ScenarioParser.parseScenarioFromString(j));
     }
 
+    @Test
+    void testParseNonExistentFile(){
+        assertThrows(IOException.class,()->{ScenarioParser.parseScenarioFromFile("THIS FILE DOES NOT EXIST");});
+    }
+
+    @Test
+    void testParseInvalidJson(){
+        assertThrows(ClassCastException.class,()->{ScenarioParser.parseScenarioFromFile("InputData/invalid_json.json");});
+        String j = "{\"scenario\":\"Dodanie książki\",\"actors\":{\"external\":\"Bibliotekarz\",\"system\":null},\"steps\":[{\"description\":\"Bibliotekarz wybiera opcje dodania nowej pozycji książkowej.\"},{\"description\":\"System wyświetla się formularz.\"},{\"description\":\"Bibliotekarz podaje dane książki.\"},{\"description\":\"Bibliotekarz zatwierdza dodanie książki.\"},{\"description\":\"System informuje o poprawnym dodaniu książki.\"}]}";
+        assertThrows(ClassCastException.class,()->{ScenarioParser.parseScenarioFromString(j);});
+    }
+
 }
