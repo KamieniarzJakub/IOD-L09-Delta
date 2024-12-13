@@ -10,7 +10,7 @@
     },
     "steps": [
         "Bibliotekarz wybiera opcje dodania nowej pozycji książkowej.",
-        "Wyświetla się formularz.",
+        "System wyświetla się formularz.",
         "Bibliotekarz podaje dane książki.",
         {
             "IF": "Bibliotekarz pragnie dodać egzemplarze książki",
