@@ -3,6 +3,7 @@ package pl.put.poznan.scenario_quality_checker.logic;
 import pl.put.poznan.scenario_quality_checker.logic.ScenarioObjects.ConditionalStep;
 import pl.put.poznan.scenario_quality_checker.logic.ScenarioObjects.IterativeStep;
 import pl.put.poznan.scenario_quality_checker.logic.ScenarioObjects.SimpleStep;
+import pl.put.poznan.scenario_quality_checker.logic.ScenarioObjects.Step;
 
 public class ScenarioStepCounter implements StepVisitor {
     private int stepCount = 0;
@@ -30,7 +31,7 @@ public class ScenarioStepCounter implements StepVisitor {
         stepCount++;  // Liczy krok IF lub ELSE
 
         if (countAllSteps) {  // Jeśli flaga aktywna, liczy także podkroki
-            for (SimpleStep innerStep : step.getSteps()) {
+            for (Step innerStep : step.getSteps()) {
                 innerStep.accept(this);
             }
         }
@@ -42,7 +43,7 @@ public class ScenarioStepCounter implements StepVisitor {
         stepCount++;  // Liczy krok FOR EACH
 
         if (countAllSteps) {  // Jeśli flaga aktywna, liczy także podkroki
-            for (SimpleStep innerStep : step.getSteps()) {
+            for (Step innerStep : step.getSteps()) {
                 innerStep.accept(this);
             }
         }

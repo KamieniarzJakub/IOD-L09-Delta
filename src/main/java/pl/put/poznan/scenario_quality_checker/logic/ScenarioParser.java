@@ -35,7 +35,7 @@ public class ScenarioParser {
 
         // Parsowanie kroków
         List<?> rawSteps = (List<?>) rawData.get("steps");
-        List<SimpleStep> parsedSteps = parseSteps(rawSteps);
+        List<Step> parsedSteps = parseSteps(rawSteps);
         scenario.setSteps(parsedSteps);
 
         System.out.println("Tytuł: " + scenario.getTitle());
@@ -48,14 +48,14 @@ public class ScenarioParser {
 
         // Użycie wizytatora - liczenie głównych kroków
         ScenarioStepCounter mainStepCounter = new ScenarioStepCounter(false);
-        for (SimpleStep step : scenario.getSteps()) {
+        for (Step step : scenario.getSteps()) {
             step.accept(mainStepCounter);
         }
         System.out.println("Liczba głównych kroków: " + mainStepCounter.getStepCount());
 
         // Użycie wizytatora - liczenie wszystkich kroków, w tym podkroków
         ScenarioStepCounter allStepCounter = new ScenarioStepCounter(true);
-        for (SimpleStep step : scenario.getSteps()) {
+        for (Step step : scenario.getSteps()) {
             step.accept(allStepCounter);
         }
         System.out.println("Liczba wszystkich kroków (w tym podkroków): " + allStepCounter.getStepCount());
@@ -87,7 +87,7 @@ public class ScenarioParser {
     /**
      * Funkcja przetwarzająca listę kroków.
      */
-    private static List<SimpleStep> parseSteps(List<?> steps) {
+    private static List<Step> parseSteps(List<?> steps) {
         return steps.stream()
                 .map(ScenarioParser::parseStep)
                 .collect(Collectors.toList());
@@ -97,7 +97,7 @@ public class ScenarioParser {
     /**
      * Funkcja przetwarzająca pojedynczy krok.
      */
-    private static SimpleStep parseStep(Object step) {
+    private static Step parseStep(Object step) {
         if (step instanceof SimpleStep) { // Taki step już istnieje jako obiekt SimpleStep
             return (SimpleStep) step;
         } else if (step instanceof String) { //Tworzy nowego SimpleStepa
@@ -107,16 +107,16 @@ public class ScenarioParser {
 
             if (stepMap.containsKey("IF")) { //Tworzenie ConditionalStepu IFa
                 String condition = (String) stepMap.get("IF");
-                List<SimpleStep> innerSteps = parseSteps((List<?>) stepMap.get("steps"));
-                return new ConditionalStep("IF: " + condition, condition, innerSteps);
+                List<Step> innerSteps = parseSteps((List<?>) stepMap.get("steps"));
+                return new ConditionalStep(ConditionalStep.ConditionalType.IF, condition, innerSteps);
             } else if (stepMap.containsKey("FOR EACH")) { //Tworzenie IterativeStepu FOR EACHa
                 String loopVariable = (String) stepMap.get("FOR EACH");
-                List<SimpleStep> innerSteps = parseSteps((List<?>) stepMap.get("steps"));
-                return new IterativeStep("FOR EACH: " + loopVariable, loopVariable, innerSteps);
+                List<Step> innerSteps = parseSteps((List<?>) stepMap.get("steps"));
+                return new IterativeStep(loopVariable, innerSteps);
             } else if (stepMap.containsKey("ELSE")) { //Tworzenie ConditionalStepu ELSa
                 String loopVariable = (String) stepMap.get("ELSE");
-                List<SimpleStep> innerSteps = parseSteps((List<?>) stepMap.get("steps"));
-                return new ConditionalStep("ELSE: " + loopVariable, loopVariable, innerSteps);
+                List<Step> innerSteps = parseSteps((List<?>) stepMap.get("steps"));
+                return new ConditionalStep(ConditionalStep.ConditionalType.ELSE, loopVariable, innerSteps);
             }
         }
 
@@ -128,24 +128,24 @@ public class ScenarioParser {
     /**
      * Funkcja printująca tak jak w przykładzie
      */
-    private static void printSteps(List<SimpleStep> steps, String prefix) {
+    private static void printSteps(List<Step> steps, String prefix) {
         if (steps == null) return;
 
         int stepCounter = 1;
 
-        for (SimpleStep step : steps) {
+        for (Step step : steps) {
             String currentPrefix = prefix.isEmpty() ? String.valueOf(stepCounter) : prefix + "." + stepCounter;
 
             if (step instanceof ConditionalStep) {
                 ConditionalStep condStep = (ConditionalStep) step;
-                System.out.println(currentPrefix + ". " + condStep.getDescription());
+                System.out.println(currentPrefix + ". " + condStep.getConditionalType() + ": " + condStep.getCondition());
                 printSteps(condStep.getSteps(), "\t" + currentPrefix); // Ciągnięcie dalej tego ConditionalStepów
             } else if (step instanceof IterativeStep) {
                 IterativeStep iterStep = (IterativeStep) step;
-                System.out.println(currentPrefix + ". " + iterStep.getDescription());
+                System.out.println(currentPrefix + ". " + "FOR EACH: " + iterStep.getLoopVariable());
                 printSteps(iterStep.getSteps(), "\t" + currentPrefix); // Ciągnięcie dalej tego IterativeStepów
-            } else {
-                System.out.println(currentPrefix + ". " + step.getDescription()); // Zwykły Stepik B)
+            } else if (step instanceof  SimpleStep) {
+                System.out.println(currentPrefix + ". " + ((SimpleStep) step).getDescription()); // Zwykły Stepik B)
             }
             stepCounter++;
         }
@@ -174,7 +174,7 @@ public class ScenarioParser {
         scenario.setSystemActors(systemActors);
 
         List<?> rawSteps = (List<?>) rawData.get("steps");
-        List<SimpleStep> parsedSteps = parseSteps(rawSteps);
+        List<Step> parsedSteps = parseSteps(rawSteps);
         scenario.setSteps(parsedSteps);
 
         return scenario;

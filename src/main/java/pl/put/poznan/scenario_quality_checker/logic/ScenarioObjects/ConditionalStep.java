@@ -1,42 +1,51 @@
 package pl.put.poznan.scenario_quality_checker.logic.ScenarioObjects;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import pl.put.poznan.scenario_quality_checker.logic.ConditionalStepSerializer;
 import pl.put.poznan.scenario_quality_checker.logic.StepVisitor;
 
 import java.util.List;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class ConditionalStep extends SimpleStep {
-    private String condition; // Warunek IF lub ELSE
-    private List<SimpleStep> steps; // Lista kroków wewnętrznych
+@JsonSerialize(using= ConditionalStepSerializer.class)
+public class ConditionalStep implements Step {
+    private ConditionalType conditionalType; // IF albo ELSE
+    private String condition; // Warunek do IF lub ELSE
+    private List<Step> steps; // Lista kroków wewnętrznych
+
+    public enum ConditionalType {
+        IF("IF"), ELSE("ELSE");
+
+        ConditionalType(String label) {
+        }
+    }
 
     public ConditionalStep() { }
 
     // Konstruktor
-    public ConditionalStep(String description, String condition, List<SimpleStep> steps) {
-        super(description); // Wywołanie konstruktora SimpleStep
-        this.condition = condition;
-        this.steps = steps;
+    public ConditionalStep(ConditionalType conditionalType, String condition, List<Step> steps) {
+        setConditionalType(conditionalType);
+        setCondition(condition);
+        setSteps(steps);
     }
 
-    /**
-     * Dynamiczne mapowanie JSON słowa kluczowego
-     */
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     public String getConditionalType() {
-        if (super.getDescription() != null) {
-            if (super.getDescription().toUpperCase().startsWith("IF")) {
-                return "IF";
-            } else if (super.getDescription().toUpperCase().startsWith("ELSE")) {
-                return "ELSE";
-            }
+        return conditionalType.toString();
+    }
+    public void setConditionalType(ConditionalType type) {
+        conditionalType = type;
+    }
+
+    public void setConditionalType(String type) throws ExceptionInInitializerError {
+        if (type.equals("IF")){
+            this.conditionalType = ConditionalType.IF;
+        } else if ((type.equals("ELSE"))) {
+            this.conditionalType = ConditionalType.ELSE;
+        } else {
+            throw new ExceptionInInitializerError();
         }
-        return "";
     }
 
     // Getter i Setter dla pola `condition`
-    @JsonProperty("condition")
     public String getCondition() {
         return condition;
     }
@@ -46,17 +55,30 @@ public class ConditionalStep extends SimpleStep {
     }
 
     // Getter i Setter dla pola `steps`
-    @JsonProperty("steps")
-    public List<SimpleStep> getSteps() {
+    public List<Step> getSteps() {
         return steps;
     }
 
-    public void setSteps(List<SimpleStep> steps) {
+    public void setSteps(List<Step> steps) {
         this.steps = steps;
     }
 
     @Override
     public void accept(StepVisitor visitor) {
         visitor.visit(this);
+    }
+
+    @Override
+    public boolean equals(Object obj){
+        if (this == obj){
+            return true;
+        }
+        if (obj == null){
+            return false;
+        }
+        if (getClass() != obj.getClass())
+            return false;
+        ConditionalStep other = (ConditionalStep) obj;
+        return conditionalType.equals(other.conditionalType) && condition.equals(other.condition) && steps.equals(other.steps);
     }
 }

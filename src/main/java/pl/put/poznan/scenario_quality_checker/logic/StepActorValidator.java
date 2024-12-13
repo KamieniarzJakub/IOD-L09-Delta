@@ -29,11 +29,11 @@ public class StepActorValidator implements StepVisitor {
         return validator.getInvalidSteps();
     }
 
-    private static void validateStepsWithVisitor(List<SimpleStep> steps, String prefix, StepActorValidator validator) {
+    private static void validateStepsWithVisitor(List<Step> steps, String prefix, StepActorValidator validator) {
         if (steps == null) return;
 
         int stepCounter = 1;
-        for (SimpleStep step : steps) {
+        for (Step step : steps) {
             validator.currentPrefix = prefix.isEmpty() ? String.valueOf(stepCounter) : prefix + "." + stepCounter;
             step.accept(validator);
             stepCounter++;
@@ -49,13 +49,13 @@ public class StepActorValidator implements StepVisitor {
 
     @Override
     public void visit(ConditionalStep step) {
-        visit((SimpleStep) step);
+//        visit(step);
         validateStepsWithVisitor(step.getSteps(), currentPrefix, this);
     }
 
     @Override
     public void visit(IterativeStep step) {
-        visit((SimpleStep) step);
+//        visit(step);
         validateStepsWithVisitor(step.getSteps(), currentPrefix, this);
     }
 

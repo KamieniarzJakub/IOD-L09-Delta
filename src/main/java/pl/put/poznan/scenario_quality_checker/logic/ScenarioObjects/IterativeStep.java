@@ -8,19 +8,18 @@ import pl.put.poznan.scenario_quality_checker.logic.StepVisitor;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonPropertyOrder({ "description", "FOR EACH", "steps" })  // Definiuje kolejność pól
-public class IterativeStep extends SimpleStep {
+@JsonPropertyOrder({ "FOR EACH", "steps" })  // Definiuje kolejność pól
+public class IterativeStep implements Step {
     @JsonProperty("FOR EACH") // Mapuje na klucz JSON "FOR EACH"
     private String loopVariable; // Zmienna iteracyjna
 
     @JsonProperty("steps")
-    private List<SimpleStep> steps; // Lista kroków wewnętrznych
+    private List<Step> steps; // Lista kroków wewnętrznych
 
     public IterativeStep() { }
 
     // Konstruktor
-    public IterativeStep(String description, String loopVariable, List<SimpleStep> steps) {
-        super(description); // Wywołanie konstruktora SimpleStep
+    public IterativeStep(String loopVariable, List<Step> steps) {
         this.loopVariable = loopVariable;
         this.steps = steps;
     }
@@ -35,16 +34,30 @@ public class IterativeStep extends SimpleStep {
     }
 
     // Getter i Setter dla pola `steps`
-    public List<SimpleStep> getSteps() {
+    public List<Step> getSteps() {
         return steps;
     }
 
-    public void setSteps(List<SimpleStep> steps) {
+    public void setSteps(List<Step> steps) {
         this.steps = steps;
     }
 
     @Override
     public void accept(StepVisitor visitor) {
         visitor.visit(this);
+    }
+
+    @Override
+    public boolean equals(Object obj){
+        if (this == obj){
+            return true;
+        }
+        if (obj == null){
+            return false;
+        }
+        if (getClass() != obj.getClass())
+            return false;
+        IterativeStep other = (IterativeStep) obj;
+        return loopVariable.equals(other.loopVariable) && steps.equals(other.steps);
     }
 }

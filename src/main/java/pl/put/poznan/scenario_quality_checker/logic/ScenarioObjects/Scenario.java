@@ -9,7 +9,7 @@ public class Scenario {
     private String title;
     private List<Actor> externalActors;
     private List<Actor> systemActors ;
-    private List<SimpleStep> steps; // Kroki mogą być tekstem lub kolejną strukturą IF/FOR EACH
+    private List<Step> steps; // Kroki mogą być tekstem lub kolejną strukturą IF/FOR EACH
 
     // Gettery i Settery
     public String getTitle() {
@@ -19,10 +19,10 @@ public class Scenario {
         this.title = title;
     }
 
-    public List<SimpleStep> getSteps() {
+    public List<Step> getSteps() {
         return steps;
     }
-    public void setSteps(List<SimpleStep> steps) {
+    public void setSteps(List<Step> steps) {
         this.steps = steps;
     }
 
@@ -41,5 +41,20 @@ public class Scenario {
     public void setSystemActors(List<Actor> systemActors) {
         this.systemActors = systemActors;
     }
+
+    @Override
+    public boolean equals(Object obj){
+        if (this == obj){
+            return true;
+        }
+        if (obj == null){
+            return false;
+        }
+        if (getClass() != obj.getClass())
+            return false;
+        Scenario other = (Scenario) obj;
+        return title.equals(other.title) && externalActors.equals(other.externalActors) &&
+                systemActors.equals(other.systemActors) && steps.equals(other.steps);
+        }
 }
 
