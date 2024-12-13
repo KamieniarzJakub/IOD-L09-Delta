@@ -9,7 +9,7 @@ public class Scenario {
     private String title;
     private List<Actor> externalActors;
     private List<Actor> systemActors ;
-    private List<SimpleStep> steps; // Kroki mogą być tekstem lub kolejną strukturą IF/FOR EACH
+    private List<Step> steps; // Kroki mogą być tekstem lub kolejną strukturą IF/FOR EACH
 
     // Gettery i Settery
     public String getTitle() {
@@ -19,10 +19,10 @@ public class Scenario {
         this.title = title;
     }
 
-    public List<SimpleStep> getSteps() {
+    public List<Step> getSteps() {
         return steps;
     }
-    public void setSteps(List<SimpleStep> steps) {
+    public void setSteps(List<Step> steps) {
         this.steps = steps;
     }
 
