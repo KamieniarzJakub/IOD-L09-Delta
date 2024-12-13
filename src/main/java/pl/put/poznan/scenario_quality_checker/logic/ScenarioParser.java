@@ -28,7 +28,7 @@ public class ScenarioParser {
             externalActors.add(new Actor(Actor.ActorType.EXTERNAL, rawExternalActor));
         }
         for (String rawSystemActor : rawActors.get("system")) {
-            systemActors.add(new Actor(Actor.ActorType.EXTERNAL, rawSystemActor));
+            systemActors.add(new Actor(Actor.ActorType.SYSTEM, rawSystemActor));
         }
         scenario.setExternalActors(externalActors);
         scenario.setSystemActors(systemActors);
