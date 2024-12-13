@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import pl.put.poznan.scenario_quality_checker.logic.SimpleStepSerializer;
 import pl.put.poznan.scenario_quality_checker.logic.StepVisitor;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class SimpleStep {
+@JsonSerialize(using= SimpleStepSerializer.class)
+public class SimpleStep implements Step{
     private String description; // Opis kroku
 
     public SimpleStep() { }

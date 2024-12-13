@@ -3,11 +3,9 @@ package pl.put.poznan.scenario_quality_checker.logic;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.node.JsonNodeCreator;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import pl.put.poznan.scenario_quality_checker.logic.ScenarioObjects.Actor;
 import pl.put.poznan.scenario_quality_checker.logic.ScenarioObjects.Scenario;
-import pl.put.poznan.scenario_quality_checker.logic.ScenarioObjects.SimpleStep;
+import pl.put.poznan.scenario_quality_checker.logic.ScenarioObjects.Step;
 
 import java.io.IOException;
 
@@ -26,14 +24,14 @@ public class ScenarioSerializer extends JsonSerializer<Scenario> {
             jsonGenerator.writeString(actor.getName());
         }
         jsonGenerator.writeEndArray();
-        jsonGenerator.writeArrayFieldStart("internal");
+        jsonGenerator.writeArrayFieldStart("system");
         for (Actor actor : scenario.getSystemActors()){
             jsonGenerator.writeString(actor.getName());
         }
         jsonGenerator.writeEndArray();
         jsonGenerator.writeEndObject();
         jsonGenerator.writeArrayFieldStart("steps");
-        for (SimpleStep step : scenario.getSteps()){
+        for (Step step : scenario.getSteps()){
             jsonGenerator.writeObject(step);
         }
         jsonGenerator.writeEndArray();
