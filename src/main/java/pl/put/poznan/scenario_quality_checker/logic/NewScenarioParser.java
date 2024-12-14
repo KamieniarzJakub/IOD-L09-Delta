@@ -79,32 +79,6 @@ public class NewScenarioParser {
         // Printowanie kroków kolejno
         printSteps2(scenario.getSteps(), "", outputLogs);
 
-        // Użycie wizytatora - liczenie głównych kroków
-        ScenarioStepCounter mainStepCounter = new ScenarioStepCounter(false);
-        for (Step step : scenario.getSteps()) {
-            step.accept(mainStepCounter);
-        }
-        outputLogs.add("Liczba głównych kroków: " + mainStepCounter.getStepCount());
-
-        // Użycie wizytatora - liczenie wszystkich kroków, w tym podkroków
-        ScenarioStepCounter allStepCounter = new ScenarioStepCounter(true);
-        for (Step step : scenario.getSteps()) {
-            step.accept(allStepCounter);
-        }
-        outputLogs.add("Liczba wszystkich kroków (w tym podkroków): " + allStepCounter.getStepCount());
-
-        ConditionalStepCounter conditionCounter = new ConditionalStepCounter();
-        outputLogs.add("Liczba wszystkich kroków warunkowych: " + conditionCounter.countConditionalSteps(scenario));
-
-        // Użycie wizytatora - walidacja kroków bez aktora
-        List<String> invalidSteps = StepActorValidator.findStepsWithoutActors(scenario);
-        if (invalidSteps.isEmpty()) {
-            outputLogs.add("Wszystkie kroki zaczynają się od aktora.");
-        } else {
-            outputLogs.add("Kroki bez aktora:");
-            outputLogs.addAll(invalidSteps);
-        }
-
         return outputLogs;
     }
 
