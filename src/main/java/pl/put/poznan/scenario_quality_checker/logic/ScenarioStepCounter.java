@@ -5,27 +5,56 @@ import pl.put.poznan.scenario_quality_checker.logic.ScenarioObjects.IterativeSte
 import pl.put.poznan.scenario_quality_checker.logic.ScenarioObjects.SimpleStep;
 import pl.put.poznan.scenario_quality_checker.logic.ScenarioObjects.Step;
 
+/**
+ * Klasa implementująca wzorzec wizytatora do liczenia kroków w scenariuszu.
+ * Obsługuje różne typy kroków: proste, warunkowe i iteracyjne.
+ */
 public class ScenarioStepCounter implements StepVisitor {
-    private int stepCount = 0;
-    private boolean countAllSteps;  // Flaga określająca tryb liczenia
 
-    // Konstruktor przyjmujący tryb liczenia
+    /**
+     * Licznik wszystkich kroków w scenariuszu.
+     */
+    private int stepCount = 0;
+
+    /**
+     * Flaga określająca, czy liczyć także podkroki.
+     */
+    private boolean countAllSteps;
+
+    /**
+     * Konstruktor tworzący licznik kroków.
+     *
+     * @param countAllSteps flaga określająca, czy liczyć wszystkie kroki, w tym podkroki
+     */
     public ScenarioStepCounter(boolean countAllSteps) {
         this.countAllSteps = countAllSteps;
     }
 
-    // Getter do uzyskania wyniku liczenia
+    /**
+     * Zwraca liczbę zliczonych kroków.
+     *
+     * @return liczba kroków
+     */
     public int getStepCount() {
         return stepCount;
     }
 
-    // Wizytacja prostego kroku
+    /**
+     * Wizytuje prosty krok scenariusza i zwiększa licznik kroków.
+     *
+     * @param step krok scenariusza do odwiedzenia
+     */
     @Override
     public void visit(SimpleStep step) {
         stepCount++;  // Liczy pojedynczy krok
     }
 
-    // Wizytacja kroku warunkowego
+    /**
+     * Wizytuje krok warunkowy scenariusza.
+     * Zwiększa licznik kroków i, jeśli flaga jest aktywna, liczy również podkroki.
+     *
+     * @param step krok warunkowy do odwiedzenia
+     */
     @Override
     public void visit(ConditionalStep step) {
         stepCount++;  // Liczy krok IF lub ELSE
@@ -37,7 +66,12 @@ public class ScenarioStepCounter implements StepVisitor {
         }
     }
 
-    // Wizytacja kroku iteracyjnego
+    /**
+     * Wizytuje krok iteracyjny scenariusza.
+     * Zwiększa licznik kroków i, jeśli flaga jest aktywna, liczy również podkroki.
+     *
+     * @param step krok iteracyjny do odwiedzenia
+     */
     @Override
     public void visit(IterativeStep step) {
         stepCount++;  // Liczy krok FOR EACH
@@ -49,4 +83,3 @@ public class ScenarioStepCounter implements StepVisitor {
         }
     }
 }
-

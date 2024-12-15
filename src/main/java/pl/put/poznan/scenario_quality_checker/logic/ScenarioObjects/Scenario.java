@@ -6,10 +6,26 @@ import java.util.List;
 
 @JsonSerialize(using = ScenarioSerializer.class)
 public class Scenario {
+    /**
+     * Deklaruje tytuł scenariusza. Powinien opisywać główny temat lub nazwę scenariusza.
+     */
     private String title;
+
+    /**
+     * Lista aktorów zewnętrznych biorących udział w scenariuszu. Powinna zawierać obiekty klasy `Actor`.
+     */
     private List<Actor> externalActors;
+
+    /**
+     * Lista aktorów systemowych biorących udział w scenariuszu.
+     */
     private List<Actor> systemActors ;
-    private List<Step> steps; // Kroki mogą być tekstem lub kolejną strukturą IF/FOR EACH
+
+    /**
+     * Lista kroków definiujących akcje w scenariuszu.
+     * Mogą to być tekstowe kroki lub struktury kontrolne, takie jak IF lub FOR EACH.
+     */
+    private List<Step> steps;
 
     // Gettery i Settery
     public String getTitle() {
@@ -42,6 +58,12 @@ public class Scenario {
         this.systemActors = systemActors;
     }
 
+    /**
+     * Porównuje ten scenariusz z innym obiektem, sprawdzając zgodność tytułu, aktorów i kroków.
+     *
+     * @param obj Obiekt do porównania
+     * @return true, jeśli wszystkie atrybuty są zgodne; false w przeciwnym razie
+     */
     @Override
     public boolean equals(Object obj){
         if (this == obj){
@@ -55,6 +77,5 @@ public class Scenario {
         Scenario other = (Scenario) obj;
         return title.equals(other.title) && externalActors.equals(other.externalActors) &&
                 systemActors.equals(other.systemActors) && steps.equals(other.steps);
-        }
+    }
 }
-
