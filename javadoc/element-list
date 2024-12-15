@@ -1,0 +1,4 @@
+pl.put.poznan.scenario_quality_checker.app
+pl.put.poznan.scenario_quality_checker.logic
+pl.put.poznan.scenario_quality_checker.logic.ScenarioObjects
+pl.put.poznan.scenario_quality_checker.rest
