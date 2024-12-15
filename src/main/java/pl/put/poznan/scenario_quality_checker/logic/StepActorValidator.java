@@ -49,13 +49,11 @@ public class StepActorValidator implements StepVisitor {
 
     @Override
     public void visit(ConditionalStep step) {
-//        visit(step);
         validateStepsWithVisitor(step.getSteps(), currentPrefix, this);
     }
 
     @Override
     public void visit(IterativeStep step) {
-//        visit(step);
         validateStepsWithVisitor(step.getSteps(), currentPrefix, this);
     }
 

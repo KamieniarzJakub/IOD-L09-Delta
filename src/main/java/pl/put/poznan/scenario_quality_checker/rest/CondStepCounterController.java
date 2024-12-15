@@ -16,7 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class CondStepCounterController {
 
     // POST - w body(raw) trzeba wrzucić jsona -> tego co jest inputem
-    @PostMapping("/parse-scenario-cc")
+    @PostMapping("/count-conditional-steps")
     public List<String> countConditionalSteps(@RequestBody String jsonContent) {
         try {
             Scenario scenario = ScenarioParser.parseScenarioFromString(jsonContent);

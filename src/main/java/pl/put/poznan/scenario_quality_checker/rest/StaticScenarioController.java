@@ -8,8 +8,8 @@ import pl.put.poznan.scenario_quality_checker.logic.ScenarioParser;
 import java.io.IOException;
 
 @RestController                                                                                                                                         
-public class ScenarioController {
-    @GetMapping("/parse-scenario")                                                                                                                          
+public class StaticScenarioController {
+    @GetMapping("/parse-static-scenario")
     public Scenario getParsedScenario(@RequestParam String filePath) {                                                                                      
         try {                                                                                                                                               
             return ScenarioParser.parseScenarioFromFile(filePath);                                                                                          

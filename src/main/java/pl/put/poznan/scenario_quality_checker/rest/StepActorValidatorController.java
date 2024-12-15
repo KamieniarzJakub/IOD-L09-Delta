@@ -13,8 +13,8 @@ import java.util.List;
 
 @RestController
 public class StepActorValidatorController {
-    @PostMapping("/parse-scenario-steps")
-    public List<String> countConditionalSteps(@RequestBody String jsonContent) {
+    @PostMapping("/steps-without-actors")
+    public List<String> getStepsWithoutActors(@RequestBody String jsonContent) {
         try {
             Scenario scenario = ScenarioParser.parseScenarioFromString(jsonContent);
             List<String> results = new ArrayList<>();

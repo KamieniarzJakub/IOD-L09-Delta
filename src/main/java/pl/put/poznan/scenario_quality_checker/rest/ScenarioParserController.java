@@ -7,10 +7,10 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
-public class NewScenarioController {
+public class ScenarioParserController {
 
     // POST - w body(raw) trzeba wrzucić jsona -> tego co jest inputem
-    @PostMapping("/parse-scenario-2")
+    @PostMapping("/parse-scenario")
     public List<String> ScenarioParser2(@RequestBody String jsonContent) {
         try {
             return NewScenarioParser.parseScenarioFromString2(jsonContent);

@@ -15,8 +15,8 @@ import java.util.List;
 @RestController
 public class ScenarioStepCounterController {
 
-    @PostMapping("/parse-scenario-count")
-    public List<String> countConditionalSteps(@RequestBody String jsonContent) {
+    @PostMapping("/count-steps")
+    public List<String> countSubSteps(@RequestBody String jsonContent) {
         try {
             Scenario scenario = ScenarioParser.parseScenarioFromString(jsonContent);
             List<String> results = new ArrayList<>();
