@@ -20,9 +20,7 @@ public class StepActorValidatorController {
             List<String> results = new ArrayList<>();
 
             List<String> invalidSteps = StepActorValidator.findStepsWithoutActors(scenario);
-            if (invalidSteps.isEmpty()) {
-                results.add("Wszystkie kroki zaczynają się od aktora.");
-            } else {
+            if (!invalidSteps.isEmpty()) {
                 results.add("Kroki bez aktora:");
                 results.addAll(invalidSteps);
             }

@@ -1,10 +1,7 @@
 // Klasa odpowiedzialna za liczenie kroków warunkowych
 package pl.put.poznan.scenario_quality_checker.logic;
 
-import pl.put.poznan.scenario_quality_checker.logic.ScenarioObjects.ConditionalStep;
-import pl.put.poznan.scenario_quality_checker.logic.ScenarioObjects.Scenario;
-import pl.put.poznan.scenario_quality_checker.logic.ScenarioObjects.SimpleStep;
-import pl.put.poznan.scenario_quality_checker.logic.ScenarioObjects.Step;
+import pl.put.poznan.scenario_quality_checker.logic.ScenarioObjects.*;
 
 public class ConditionalStepCounter {
 
@@ -19,10 +16,13 @@ public class ConditionalStepCounter {
     // Metoda pomocnicza licząca kroki warunkowe rekurencyjnie
     private int countConditionalStepsInList(java.util.List<Step> steps) {
         int count = 0;
+
         for (Step step : steps) {
             if (step instanceof ConditionalStep) {
                 count++;
                 count += countConditionalStepsInList(((ConditionalStep) step).getSteps());
+            } else if (step instanceof IterativeStep) {
+                count += countConditionalStepsInList(((IterativeStep) step).getSteps());
             }
         }
         return count;
