@@ -2,48 +2,33 @@ package pl.put.poznan.scenario_quality_checker.logic;
 
 import pl.put.poznan.scenario_quality_checker.logic.ScenarioObjects.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ScenarioParser {
 
-    public static Scenario parseScenarioFromFile(String path) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
+    private static final Logger logger = LoggerFactory.getLogger(ScenarioParser.class);
 
-        // Wczytanie JSONa
+    public static Scenario parseScenarioFromFile(String path) throws IOException {
+        logger.debug("Rozpoczynam parsowanie scenariusza z pliku: {}", path);
+
+        ObjectMapper mapper = new ObjectMapper();
         Map<String, Object> rawData = mapper.readValue(new File(path), Map.class);
 
-        Scenario scenario = new Scenario();
-        scenario.setTitle((String) rawData.get("title"));
+        Scenario scenario = createScenarioFromData(rawData);
 
-        Map<String, List<String>> rawActors = (Map<String, List<String>>) rawData.get("actors");
-        List<Actor> externalActors = new java.util.ArrayList<>(List.of());
-        List<Actor> systemActors = new java.util.ArrayList<>(List.of());
-        for (String rawExternalActor : rawActors.get("external")) {
-            externalActors.add(new Actor(Actor.ActorType.EXTERNAL, rawExternalActor));
-        }
-        for (String rawSystemActor : rawActors.get("system")) {
-            systemActors.add(new Actor(Actor.ActorType.SYSTEM, rawSystemActor));
-        }
-        scenario.setExternalActors(externalActors);
-        scenario.setSystemActors(systemActors);
-
-        // Parsowanie kroków
-        List<?> rawSteps = (List<?>) rawData.get("steps");
-        List<Step> parsedSteps = parseSteps(rawSteps);
-        scenario.setSteps(parsedSteps);
-
-        System.out.println("Tytuł: " + scenario.getTitle());
-        System.out.println("Aktorzy: " + String.join(", ", parseActors(scenario.getExternalActors())));
-        System.out.println("Aktor systemowy: " + String.join(", ", parseActors(scenario.getSystemActors())));
-        System.out.println();
+        logger.info("Załadowano scenariusz z tytułem: {}", scenario.getTitle());
+        logger.info("Aktorzy zewnętrzni: {}", String.join(", ", parseActors(scenario.getExternalActors())));
+        logger.info("Aktorzy systemowi: {}", String.join(", ", parseActors(scenario.getSystemActors())));
 
         // Printowanie kroków kolejno
+        logger.debug("Rozpoczynam wypisywanie kroków scenariusza.");
         printSteps(scenario.getSteps(), "");
 
         // Użycie wizytatora - liczenie głównych kroków
@@ -51,83 +36,73 @@ public class ScenarioParser {
         for (Step step : scenario.getSteps()) {
             step.accept(mainStepCounter);
         }
-        System.out.println("Liczba głównych kroków: " + mainStepCounter.getStepCount());
+        logger.info("Liczba głównych kroków: {}", mainStepCounter.getStepCount());
 
         // Użycie wizytatora - liczenie wszystkich kroków, w tym podkroków
         ScenarioStepCounter allStepCounter = new ScenarioStepCounter(true);
         for (Step step : scenario.getSteps()) {
             step.accept(allStepCounter);
         }
-        System.out.println("Liczba wszystkich kroków (w tym podkroków): " + allStepCounter.getStepCount());
-        
-        ConditionalStepCounter conditionCunter = new ConditionalStepCounter();
+        logger.info("Liczba wszystkich kroków (w tym podkroków): {}", allStepCounter.getStepCount());
 
-        System.out.println("Liczba wszystkich kroków warunkowych: " + conditionCunter.countConditionalSteps(scenario));
-        
-        // Użycie wizytatora - walidacja kroków bez aktora
+        // Liczenie warunkowych kroków
+        ConditionalStepCounter conditionCounter = new ConditionalStepCounter();
+        logger.info("Liczba wszystkich kroków warunkowych: {}", conditionCounter.countConditionalSteps(scenario));
+
+        // Walidacja kroków bez aktora
         List<String> invalidSteps = StepActorValidator.findStepsWithoutActors(scenario);
         if (invalidSteps.isEmpty()) {
-            System.out.println("Wszystkie kroki zaczynają się od aktora.");
+            logger.info("Wszystkie kroki zaczynają się od aktora.");
         } else {
-            System.out.println("Kroki bez aktora:");
-            invalidSteps.forEach(System.out::println);
+            logger.warn("Kroki bez aktora:");
+            invalidSteps.forEach(step -> logger.warn(step));
         }
-        
+
         return scenario;
     }
 
-
-    /**
-     * Funkcja przetwarzająca listę aktorów
-     */
     private static List<String> parseActors(List<Actor> actors) {
+        logger.debug("Parsowanie listy aktorów: {}", actors);
         return actors.stream().map(Actor::getName).collect(Collectors.toList());
     }
 
-    /**
-     * Funkcja przetwarzająca listę kroków.
-     */
     private static List<Step> parseSteps(List<?> steps) {
+        logger.debug("Parsowanie listy kroków: {}", steps);
         return steps.stream()
                 .map(ScenarioParser::parseStep)
                 .collect(Collectors.toList());
     }
 
-
-    /**
-     * Funkcja przetwarzająca pojedynczy krok.
-     */
     private static Step parseStep(Object step) {
-        if (step instanceof SimpleStep) { // Taki step już istnieje jako obiekt SimpleStep
+        logger.debug("Parsowanie kroku: {}", step);
+        if (step instanceof SimpleStep) {
             return (SimpleStep) step;
-        } else if (step instanceof String) { //Tworzy nowego SimpleStepa
+        } else if (step instanceof String) {
             return new SimpleStep((String) step);
-        } else if (step instanceof Map) { // Natknięcie się na {} w steps
+        } else if (step instanceof Map) {
             Map<?, ?> stepMap = (Map<?, ?>) step;
 
-            if (stepMap.containsKey("IF")) { //Tworzenie ConditionalStepu IFa
+            if (stepMap.containsKey("IF")) {
                 String condition = (String) stepMap.get("IF");
                 List<Step> innerSteps = parseSteps((List<?>) stepMap.get("steps"));
+                logger.debug("Stworzono krok warunkowy typu IF z warunkiem: {}", condition);
                 return new ConditionalStep(ConditionalStep.ConditionalType.IF, condition, innerSteps);
-            } else if (stepMap.containsKey("FOR EACH")) { //Tworzenie IterativeStepu FOR EACHa
+            } else if (stepMap.containsKey("FOR EACH")) {
                 String loopVariable = (String) stepMap.get("FOR EACH");
                 List<Step> innerSteps = parseSteps((List<?>) stepMap.get("steps"));
+                logger.debug("Stworzono krok iteracyjny FOR EACH z zmienną: {}", loopVariable);
                 return new IterativeStep(loopVariable, innerSteps);
-            } else if (stepMap.containsKey("ELSE")) { //Tworzenie ConditionalStepu ELSa
+            } else if (stepMap.containsKey("ELSE")) {
                 String loopVariable = (String) stepMap.get("ELSE");
                 List<Step> innerSteps = parseSteps((List<?>) stepMap.get("steps"));
+                logger.debug("Stworzono krok warunkowy ELSE z warunkiem: {}", loopVariable);
                 return new ConditionalStep(ConditionalStep.ConditionalType.ELSE, loopVariable, innerSteps);
             }
         }
 
-        // Obsługa błędnego formatu JSON
         throw new IllegalArgumentException("Nieoczekiwany format kroku: " + step);
     }
 
-
-    /**
-     * Funkcja printująca tak jak w przykładzie
-     */
     private static void printSteps(List<Step> steps, String prefix) {
         if (steps == null) return;
 
@@ -138,26 +113,34 @@ public class ScenarioParser {
 
             if (step instanceof ConditionalStep) {
                 ConditionalStep condStep = (ConditionalStep) step;
-                System.out.println(currentPrefix + ". " + condStep.getConditionalType() + ": " + condStep.getCondition());
-                printSteps(condStep.getSteps(), "\t" + currentPrefix); // Ciągnięcie dalej tego ConditionalStepów
+                logger.info("{} {}: {}", currentPrefix, condStep.getConditionalType(), condStep.getCondition());
+                printSteps(condStep.getSteps(), "\t" + currentPrefix);
             } else if (step instanceof IterativeStep) {
                 IterativeStep iterStep = (IterativeStep) step;
-                System.out.println(currentPrefix + ". " + "FOR EACH: " + iterStep.getLoopVariable());
-                printSteps(iterStep.getSteps(), "\t" + currentPrefix); // Ciągnięcie dalej tego IterativeStepów
-            } else if (step instanceof  SimpleStep) {
-                System.out.println(currentPrefix + ". " + ((SimpleStep) step).getDescription()); // Zwykły Stepik B)
+                logger.info("{} FOR EACH: {}", currentPrefix, iterStep.getLoopVariable());
+                printSteps(iterStep.getSteps(), "\t" + currentPrefix);
+            } else if (step instanceof SimpleStep) {
+                logger.info("{} {}", currentPrefix, ((SimpleStep) step).getDescription());
             }
             stepCounter++;
         }
     }
 
     public static Scenario parseScenarioFromString(String jsonContent) throws IOException {
+        logger.debug("Rozpoczynam parsowanie scenariusza z zawartości JSON.");
+
         ObjectMapper mapper = new ObjectMapper();
         Map<String, Object> rawData = mapper.readValue(jsonContent, Map.class);
-        return createScenarioFromData(rawData);
+
+        Scenario scenario = createScenarioFromData(rawData);
+        logger.info("Załadowano scenariusz z tytułem: {}", scenario.getTitle());
+
+        return scenario;
     }
 
     private static Scenario createScenarioFromData(Map<String, Object> rawData) {
+        logger.debug("Tworzenie scenariusza z danych wejściowych: {}", rawData);
+
         Scenario scenario = new Scenario();
         scenario.setTitle((String) rawData.get("title"));
 
@@ -177,7 +160,8 @@ public class ScenarioParser {
         List<Step> parsedSteps = parseSteps(rawSteps);
         scenario.setSteps(parsedSteps);
 
+        logger.debug("Scenariusz został pomyślnie utworzony.");
+
         return scenario;
     }
-
 }
