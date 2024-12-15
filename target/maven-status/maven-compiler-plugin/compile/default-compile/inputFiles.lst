@@ -1,3 +1,24 @@
-/home/niebieskirekin/Dokumenty/Studia/semestr_5/IO/ioprojectarchitecture/src/main/java/pl/put/poznan/transformer/app/TextTransformerApplication.java
-/home/niebieskirekin/Dokumenty/Studia/semestr_5/IO/ioprojectarchitecture/src/main/java/pl/put/poznan/transformer/rest/TextTransformerController.java
-/home/niebieskirekin/Dokumenty/Studia/semestr_5/IO/ioprojectarchitecture/src/main/java/pl/put/poznan/transformer/logic/TextTransformer.java
+C:\Users\kamie\Projekty\IO (Github)\ScenarioChecker1\src\main\java\pl\put\poznan\scenario_quality_checker\app\ScenarioQualityCheckerApplication.java
+C:\Users\kamie\Projekty\IO (Github)\ScenarioChecker1\src\main\java\pl\put\poznan\scenario_quality_checker\logic\ConditionalStepSerializer.java
+C:\Users\kamie\Projekty\IO (Github)\ScenarioChecker1\src\main\java\pl\put\poznan\scenario_quality_checker\logic\ScenarioStepCounter.java
+C:\Users\kamie\Projekty\IO (Github)\ScenarioChecker1\src\main\java\pl\put\poznan\scenario_quality_checker\rest\ScenarioStepCounterController.java
+C:\Users\kamie\Projekty\IO (Github)\ScenarioChecker1\src\main\java\pl\put\poznan\scenario_quality_checker\logic\ScenarioParser.java
+C:\Users\kamie\Projekty\IO (Github)\ScenarioChecker1\src\main\java\pl\put\poznan\scenario_quality_checker\rest\ScenarioController.java
+C:\Users\kamie\Projekty\IO (Github)\ScenarioChecker1\src\main\java\pl\put\poznan\scenario_quality_checker\rest\CondStepCounterController.java
+C:\Users\kamie\Projekty\IO (Github)\ScenarioChecker1\src\main\java\pl\put\poznan\scenario_quality_checker\logic\ScenarioObjects\ConditionalStep.java
+C:\Users\kamie\Projekty\IO (Github)\ScenarioChecker1\src\main\java\pl\put\poznan\scenario_quality_checker\logic\ScenarioObjects\Scenario.java
+C:\Users\kamie\Projekty\IO (Github)\ScenarioChecker1\src\main\java\pl\put\poznan\scenario_quality_checker\rest\StepActorValidatorController.java
+C:\Users\kamie\Projekty\IO (Github)\ScenarioChecker1\src\main\java\pl\put\poznan\scenario_quality_checker\logic\ScenarioObjects\Step.java
+C:\Users\kamie\Projekty\IO (Github)\ScenarioChecker1\src\main\java\pl\put\poznan\scenario_quality_checker\logic\ScenarioSerializer.java
+C:\Users\kamie\Projekty\IO (Github)\ScenarioChecker1\src\main\java\pl\put\poznan\scenario_quality_checker\logic\StepVisitor.java
+C:\Users\kamie\Projekty\IO (Github)\ScenarioChecker1\src\main\java\pl\put\poznan\scenario_quality_checker\logic\ScenarioObjects\SimpleStep.java
+C:\Users\kamie\Projekty\IO (Github)\ScenarioChecker1\src\main\java\pl\put\poznan\scenario_quality_checker\logic\KeyWords.java
+C:\Users\kamie\Projekty\IO (Github)\ScenarioChecker1\src\main\java\pl\put\poznan\scenario_quality_checker\logic\NewScenarioParser.java
+C:\Users\kamie\Projekty\IO (Github)\ScenarioChecker1\src\main\java\pl\put\poznan\scenario_quality_checker\logic\ScenarioObjects\IterativeStep.java
+C:\Users\kamie\Projekty\IO (Github)\ScenarioChecker1\src\main\java\pl\put\poznan\scenario_quality_checker\rest\ScenarioQualityCheckerController.java
+C:\Users\kamie\Projekty\IO (Github)\ScenarioChecker1\src\main\java\pl\put\poznan\scenario_quality_checker\rest\NewScenarioController.java
+C:\Users\kamie\Projekty\IO (Github)\ScenarioChecker1\src\main\java\pl\put\poznan\scenario_quality_checker\logic\ScenarioQualityChecker.java
+C:\Users\kamie\Projekty\IO (Github)\ScenarioChecker1\src\main\java\pl\put\poznan\scenario_quality_checker\logic\SimpleStepSerializer.java
+C:\Users\kamie\Projekty\IO (Github)\ScenarioChecker1\src\main\java\pl\put\poznan\scenario_quality_checker\logic\StepActorValidator.java
+C:\Users\kamie\Projekty\IO (Github)\ScenarioChecker1\src\main\java\pl\put\poznan\scenario_quality_checker\logic\ConditionalStepCounter.java
+C:\Users\kamie\Projekty\IO (Github)\ScenarioChecker1\src\main\java\pl\put\poznan\scenario_quality_checker\logic\ScenarioObjects\Actor.java

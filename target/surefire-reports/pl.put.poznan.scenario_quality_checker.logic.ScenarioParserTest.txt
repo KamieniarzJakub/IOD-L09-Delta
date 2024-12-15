@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: pl.put.poznan.scenario_quality_checker.logic.ScenarioParserTest
+-------------------------------------------------------------------------------
+Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.328 s - in pl.put.poznan.scenario_quality_checker.logic.ScenarioParserTest
