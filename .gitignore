@@ -28,3 +28,6 @@ replay_pid*
 
 # Target compiled binaries
 target/*
+__pycache__
+.pytest_cache
+
