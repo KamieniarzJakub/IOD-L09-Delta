@@ -1,15 +1,18 @@
 name: Deploy Javadoc
 
 on:
-  push:
-    branches: ["release"]
+  workflow_run:
+    workflows: ["Test and validate Java"]
+    types:
+      - completed
   workflow_dispatch:
 
 jobs:
   publish:
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     permissions:
-      contents: write  # if you have a protection rule on your repository, you'll need to give write permission to the workflow.
+      contents: write
     steps:
       - name: Deploy JavaDoc 🚀
         uses: MathieuSoysal/Javadoc-publisher.yml@v2.5.0

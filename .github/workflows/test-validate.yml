@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
 
     steps:
@@ -16,5 +16,6 @@ jobs:
         with:
           java-version: "11"
           distribution: "temurin"
+          cache: maven
       - name: Validate, build and run tests
         run: mvn --batch-mode --update-snapshots verify

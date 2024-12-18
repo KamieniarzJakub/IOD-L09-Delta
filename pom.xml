@@ -84,13 +84,4 @@
         </pluginRepository>
     </pluginRepositories>
 
-    <distributionManagement>
-        <repository>
-            <id>github</id>
-            <name>GitHub KamieniarzJakub Apache Maven Packages</name>
-            <url>https://maven.pkg.github.com/KamieniarzJakub/IOD-L09-Delta</url>
-        </repository>
-    </distributionManagement>
-
-
 </project>
