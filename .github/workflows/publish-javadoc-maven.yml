@@ -2,7 +2,7 @@ name: Deploy Javadoc
 
 on:
   push:
-    branches: ["main"]
+    branches: ["release"]
   workflow_dispatch:
 
 jobs:
@@ -16,6 +16,6 @@ jobs:
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           javadoc-branch: javadoc
-          java-version: 17
+          java-version: 11
           target-folder: javadoc # url will be https://<username>.github.io/<repo>/javadoc
           project: maven
