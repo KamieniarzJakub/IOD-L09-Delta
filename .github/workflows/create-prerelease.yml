@@ -1,0 +1,55 @@
+name: Create a prerelease
+
+on:
+  workflow_run:
+    workflows: ["Test and validate Java"]
+    types:
+      - completed
+  workflow_dispatch:
+
+jobs:
+  publish-prerelease:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Build with Maven and publish to GitHub Packages
+        run: mvn deploy -DskipTests --settings .github/maven-settings.xml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Delete Previous Tag
+        run: |
+          git fetch --tags
+          git tag -d "prerelease-${{ github.sha }}" || echo "No previous tag found."
+          git push origin --delete "prerelease-${{ github.sha }}" || echo "No previous tag found."
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create Prerelease
+        id: create_release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: prerelease-${{ github.sha }}
+          release_name: "Prerelease ${{ github.sha }}"
+          draft: false
+          prerelease: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload JAR file
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: prerelease-${{ github.sha }}
+          files: target/*.jar
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -87,10 +87,14 @@
     <distributionManagement>
         <repository>
             <id>github</id>
-            <name>GitHub KamieniarzJakub Apache Maven Packages</name>
+            <name>GitHub Maven Packages</name>
             <url>https://maven.pkg.github.com/KamieniarzJakub/IOD-L09-Delta</url>
         </repository>
+        <snapshotRepository>
+            <id>github-snapshots</id>
+            <name>GitHub Snapshots</name>
+            <url>https://maven.pkg.github.com/KamieniarzJakub/IOD-L09-Delta</url>
+        </snapshotRepository>
     </distributionManagement>
-
 
 </project>
