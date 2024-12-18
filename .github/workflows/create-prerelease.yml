@@ -11,6 +11,8 @@ jobs:
   publish-prerelease:
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    permissions:
+      contents: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -23,24 +25,16 @@ jobs:
           cache: maven
 
       - name: Build with Maven and publish to GitHub Packages
-        run: mvn deploy -DskipTests --settings .github/maven-settings.xml
+        run: mvn clean package -DskipTests --settings .github/maven-settings.xml
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Delete Previous Tag
-        run: |
-          git fetch --tags
-          git tag -d "prerelease-${{ github.sha }}" || echo "No previous tag found."
-          git push origin --delete "prerelease-${{ github.sha }}" || echo "No previous tag found."
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}}
 
       - name: Create Prerelease
         id: create_release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: prerelease-${{ github.sha }}
-          release_name: "Prerelease ${{ github.sha }}"
+          tag_name: pre-release-development
+          release_name: "Pre-release ${{ github.sha }}"
           draft: false
           prerelease: true
         env:
@@ -49,7 +43,7 @@ jobs:
       - name: Upload JAR file
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: prerelease-${{ github.sha }}
+          tag_name:  pre-release-development
           files: target/*.jar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
