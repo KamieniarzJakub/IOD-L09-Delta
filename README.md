@@ -6,6 +6,9 @@
 ## ScenarioQualityChecker
 Dla analityków dokumentujących wymagania funkcjonalne za pomocą scenariuszy nasza aplikacja SQC dostarczy informacji ilościowych oraz umożliwi wykrywanie problemów w wymaganiach funkcjonalnych zapisanych w postaci scenariuszy. Aplikacja będzie dostępna poprzez GUI a także jako zdalne API dzięki czemu można ją zintegrować z istniejącymi narzędziami.
 
+## Product log
+https://docs.google.com/spreadsheets/d/1i_asc-qoH2MX9fnkgrB1XPraAk8zYmRW17bshJaDTZo/edit?gid=1934159657#gid=1934159657
+
 ### Notacja scenariuszy:
 - Scenariusz zawiera nagłówek określający jego tytuł i aktorów (zewnętrznych oraz system)
 - Scenariusz składa się z kroków (każdy krok zawiera tekst)
