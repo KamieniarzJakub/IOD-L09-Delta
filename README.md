@@ -9,6 +9,11 @@ Dla analityków dokumentujących wymagania funkcjonalne za pomocą scenariuszy n
 ## Product log
 https://docs.google.com/spreadsheets/d/1i_asc-qoH2MX9fnkgrB1XPraAk8zYmRW17bshJaDTZo/edit?gid=1934159657#gid=1934159657
 
+## Cel Sprint 1:
+<strong>Implementacja serwera REST oraz podstawowych funkcji do analizy scenariusza</strong>
+## Cel Sprint 2:
+<strong>Implementacja interaktywnego GUI oraz pobierania scenariusza</strong>
+
 ### Notacja scenariuszy:
 - Scenariusz zawiera nagłówek określający jego tytuł i aktorów (zewnętrznych oraz system)
 - Scenariusz składa się z kroków (każdy krok zawiera tekst)
