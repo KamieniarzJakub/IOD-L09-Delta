@@ -4,11 +4,13 @@ import { ThemeContext } from './App';
 function WyswietlScenariusz() {
   const [jsonInput, setJsonInput] = useState('');
   const { isDarkMode, toggleTheme } = useContext(ThemeContext);
+  const [response, setResponse] = useState([]);
+
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const res = await fetch('/count-steps', {
+      const res = await fetch('/parse-scenario', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -17,10 +19,21 @@ function WyswietlScenariusz() {
       });
 
       // Zakładamy, że odpowiedź nie jest potrzebna tutaj
-      await res.json();
-    } catch (error) {
+      console.log(res);
+      const data = await res.json();
+      setResponse(Array.isArray(data) ? data : [JSON.stringify(data, null, 2)]);    } catch (error) {
       console.error('Błąd połączenia z API:', error);
     }
+  };
+
+  const handleDownload = () => {
+    const element = document.createElement('a');
+    const file = new Blob([response.join('\n')], { type: 'text/plain' });
+    element.href = URL.createObjectURL(file);
+    element.download = 'scenariusz.txt';
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
   };
 
   return (
@@ -93,7 +106,25 @@ function WyswietlScenariusz() {
         >
           Wyślij
         </button>
+        <button type="button" onClick={handleDownload} style={{ marginLeft: '458px' }}>Pobierz wynik jako plik</button>
       </form>
+      {response.length > 0 && (
+        <div style={{ marginTop: '20px' }}>
+          <h2 style={{ color: isDarkMode ? '#bbb' : '#555' }}>Wyniki:</h2>
+          <pre
+            style={{
+              backgroundColor: isDarkMode ? '#2c2c2c' : '#f4f4f9',
+              color: isDarkMode ? '#e0e0e0' : '#222',
+              padding: '20px',
+              fontSize: '16px',
+              border: `1px solid ${isDarkMode ? '#444' : '#ddd'}`,
+              borderRadius: '4px',
+            }}
+          >
+            {response.join('\n')}
+          </pre>
+        </div>
+      )}
     </div>
   );
 }
