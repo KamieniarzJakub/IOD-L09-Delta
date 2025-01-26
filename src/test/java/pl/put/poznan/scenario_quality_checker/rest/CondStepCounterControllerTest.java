@@ -10,12 +10,11 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import static pl.put.poznan.scenario_quality_checker.rest.TextConstants.*;
 
 class CondStepCounterControllerTest {
 
-    final String keywordPhrase = "Ilość kroków rozpoczynających się od słowa kluczowego: ";
-    final String conditionalPhrase = "Ilość decyzji warunkowych: ";
-    final String runtimeExceptionPhrase = "Błąd podczas przetwarzania pliku JSON";
+
 
     @BeforeEach
     void setUp() {
