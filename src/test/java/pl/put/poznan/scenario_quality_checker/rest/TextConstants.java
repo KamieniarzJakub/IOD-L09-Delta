@@ -6,4 +6,5 @@ public class TextConstants {
     static final String runtimeExceptionPhrase = "Błąd podczas przetwarzania pliku JSON";
     static final String mainStepsPhrase = "Liczba głównych kroków: ";
     static final String allStepsPhrase = "Liczba wszystkich kroków (w tym podkroków): ";
+    static final String stepsWithoutActorsPhrase = "Kroki bez aktora:";
 }

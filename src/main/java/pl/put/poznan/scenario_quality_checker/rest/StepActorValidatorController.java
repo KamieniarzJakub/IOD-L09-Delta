@@ -23,9 +23,13 @@ public class StepActorValidatorController {
         stepActorValidator = new StepActorValidator(scenario);
     }
 
+    public StepActorValidatorController(StepActorValidator validator){
+        stepActorValidator = validator;
+    }
+
     public List<String> getStepsWithoutActors(){
         List<String> results = new ArrayList<>();
-        List<String> invalidSteps = stepActorValidator.getInvalidSteps();
+        List<String> invalidSteps = stepActorValidator.findStepsWithoutActors();
         if (!invalidSteps.isEmpty()) {
             results.add("Kroki bez aktora:");
             results.addAll(invalidSteps);
