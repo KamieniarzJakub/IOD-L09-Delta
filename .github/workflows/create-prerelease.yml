@@ -35,6 +35,15 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Move Tag
+        run: |
+          git tag -d pre-release-development || true
+          git push origin :refs/tags/pre-release-development || true
+          git tag pre-release-development
+          git push origin pre-release-development
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Create Prerelease
         id: create_release
         uses: softprops/action-gh-release@v2
