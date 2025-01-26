@@ -14,25 +14,38 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 public class CondStepCounterController {
+    private final ConditionalStepCounter counterC;
+    private final IterativeStepCounter counterI;
+
+    public CondStepCounterController(ConditionalStepCounter counterCond, IterativeStepCounter counterIter) {
+        counterC = counterCond;
+        counterI = counterIter;
+    }
+
+    public CondStepCounterController() {
+        counterC = new ConditionalStepCounter();
+        counterI = new IterativeStepCounter();
+    }
+
+    List<String> countConditionalSteps(Scenario scenario) {
+        int conditionalCount = counterC.countConditionalSteps(scenario);
+        int iterativeCount = counterI.countIterativeSteps(scenario);
+        int totalCount = conditionalCount + iterativeCount;
+
+        List<String> results = new ArrayList<>();
+
+        results.add("Ilość kroków rozpoczynających się od słowa kluczowego: " + totalCount);
+        results.add("Ilość decyzji warunkowych: " + conditionalCount);
+
+        return results;
+    }
 
     // POST - w body(raw) trzeba wrzucić jsona -> tego co jest inputem
     @PostMapping("/count-conditional-steps")
     public List<String> countConditionalSteps(@RequestBody String jsonContent) {
         try {
             Scenario scenario = ScenarioParser.parseScenarioFromString(jsonContent);
-            ConditionalStepCounter counterC = new ConditionalStepCounter();
-            IterativeStepCounter counterI = new IterativeStepCounter();
-
-            int conditionalCount = counterC.countConditionalSteps(scenario);
-            int iterativeCount = counterI.countIterativeSteps(scenario);
-            int totalCount = conditionalCount + iterativeCount;
-
-            List<String> results = new ArrayList<>();
-
-            results.add("Ilość kroków rozpoczynających się od słowa kluczowego: " + totalCount);
-            results.add("Ilość decyzji warunkowych: " + conditionalCount);
-
-            return results;
+            return countConditionalSteps(scenario);
         } catch (IOException e) {
             throw new RuntimeException("Błąd podczas przetwarzania pliku JSON", e);
         }
