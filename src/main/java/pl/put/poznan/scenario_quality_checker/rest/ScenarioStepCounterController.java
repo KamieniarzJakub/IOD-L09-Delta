@@ -15,25 +15,39 @@ import java.util.List;
 @RestController
 public class ScenarioStepCounterController {
 
+    final ScenarioStepCounter mainStepCounter;
+    final ScenarioStepCounter allStepCounter;
+
+    public ScenarioStepCounterController(ScenarioStepCounter stepCounter1, ScenarioStepCounter stepCounter2){
+        mainStepCounter = stepCounter1;
+        allStepCounter = stepCounter2;
+    }
+
+    public ScenarioStepCounterController(){
+        mainStepCounter = new ScenarioStepCounter(false);
+        allStepCounter = new ScenarioStepCounter(true);
+    }
+
+    List<String> countSubSteps(Scenario scenario) {
+        List<String> results = new ArrayList<>();
+
+        for (Step step : scenario.getSteps()) {
+            step.accept(mainStepCounter);
+        }
+        results.add("Liczba głównych kroków: " + mainStepCounter.getStepCount());
+
+        for (Step step : scenario.getSteps()) {
+            step.accept(allStepCounter);
+        }
+        results.add("Liczba wszystkich kroków (w tym podkroków): " + allStepCounter.getStepCount());
+        return results;
+    }
+
     @PostMapping("/count-steps")
     public List<String> countSubSteps(@RequestBody String jsonContent) {
         try {
             Scenario scenario = ScenarioParser.parseScenarioFromString(jsonContent);
-            List<String> results = new ArrayList<>();
-
-            ScenarioStepCounter mainStepCounter = new ScenarioStepCounter(false);
-            for (Step step : scenario.getSteps()) {
-                step.accept(mainStepCounter);
-            }
-            results.add("Liczba głównych kroków: " + mainStepCounter.getStepCount());
-
-            ScenarioStepCounter allStepCounter = new ScenarioStepCounter(true);
-            for (Step step : scenario.getSteps()) {
-                step.accept(allStepCounter);
-            }
-            results.add("Liczba wszystkich kroków (w tym podkroków): " + allStepCounter.getStepCount());
-
-            return results;
+            return countSubSteps(scenario);
         } catch (IOException e) {
             throw new RuntimeException("Błąd podczas przetwarzania pliku JSON", e);
         }
