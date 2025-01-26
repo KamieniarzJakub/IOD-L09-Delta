@@ -13,20 +13,22 @@ import java.util.List;
 
 @RestController
 public class StepActorValidatorController {
+
+    public List<String> getStepsWithoutActors(Scenario scenario){
+        List<String> results = new ArrayList<>();
+        List<String> invalidSteps = StepActorValidator.findStepsWithoutActors(scenario);
+        if (!invalidSteps.isEmpty()) {
+            results.add("Kroki bez aktora:");
+            results.addAll(invalidSteps);
+        }
+        return results;
+    }
+
     @PostMapping("/steps-without-actors")
     public List<String> getStepsWithoutActors(@RequestBody String jsonContent) {
         try {
             Scenario scenario = ScenarioParser.parseScenarioFromString(jsonContent);
-            List<String> results = new ArrayList<>();
-
-            List<String> invalidSteps = StepActorValidator.findStepsWithoutActors(scenario);
-            if (!invalidSteps.isEmpty()) {
-                results.add("Kroki bez aktora:");
-                results.addAll(invalidSteps);
-            }
-
-            return results;
-
+            return getStepsWithoutActors(scenario);
         } catch (IOException e) {
             throw new RuntimeException("Błąd podczas przetwarzania pliku JSON", e);
         }
