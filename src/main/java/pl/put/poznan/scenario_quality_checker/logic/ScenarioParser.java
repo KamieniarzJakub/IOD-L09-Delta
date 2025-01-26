@@ -50,7 +50,8 @@ public class ScenarioParser {
         logger.info("Liczba wszystkich kroków warunkowych: {}", conditionCounter.countConditionalSteps(scenario));
 
         // Walidacja kroków bez aktora
-        List<String> invalidSteps = StepActorValidator.findStepsWithoutActors(scenario);
+        StepActorValidator stepActorValidator = new StepActorValidator(scenario);
+        List<String> invalidSteps = stepActorValidator.findStepsWithoutActors();
         if (invalidSteps.isEmpty()) {
             logger.info("Wszystkie kroki zaczynają się od aktora.");
         } else {
