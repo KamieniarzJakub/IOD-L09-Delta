@@ -4,9 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import pl.put.poznan.scenario_quality_checker.logic.ConditionalStepCounter;
 import pl.put.poznan.scenario_quality_checker.logic.IterativeStepCounter;
-import pl.put.poznan.scenario_quality_checker.logic.ScenarioObjects.Scenario;
+import pl.put.poznan.scenario_quality_checker.logic.ScenarioObjects.*;
 
-import java.net.ConnectException;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -22,6 +21,7 @@ class CondStepCounterControllerTest {
     void setUp() {
     }
 
+    // mock
     @Test
     void testCountConditionalStepsScenario() {
         ConditionalStepCounter mockConditionalStepCounter = mock(ConditionalStepCounter.class);
@@ -36,6 +36,7 @@ class CondStepCounterControllerTest {
         assertEquals(expected,result);
     }
 
+    // mock
     @Test
     void testCountConditionalStepsEmptyScenario() {
         ConditionalStepCounter mockConditionalStepCounter = mock(ConditionalStepCounter.class);
@@ -50,6 +51,42 @@ class CondStepCounterControllerTest {
         assertEquals(expected,result);
     }
 
+    @Test
+    void testCountConditionalStepsRealScenario(){
+        Scenario scenario = new Scenario();
+        scenario.setTitle("Dodanie książki");
+        scenario.setExternalActors(List.of(new Actor(Actor.ActorType.EXTERNAL,"Bibliotekarz"), new Actor(Actor.ActorType.EXTERNAL,"Testowy")));
+        scenario.setSystemActors(List.of(new Actor(Actor.ActorType.SYSTEM,"System")));
+        scenario.setSteps(List.of(
+                new SimpleStep("Bibliotekarz wybiera opcje dodania nowej pozycji książkowej."),
+                new SimpleStep("Wyświetla się formularz."),
+                new SimpleStep("Bibliotekarz podaje dane książki."),
+                new ConditionalStep(ConditionalStep.ConditionalType.IF, "Bibliotekarz pragnie dodać egzemplarze książki",List.of(
+                        new SimpleStep("Bibliotekarz wybiera opcję definiowania egzemplarzy."),
+                        new SimpleStep("System prezentuje zdefiniowane egzemplarze."),
+                        new IterativeStep("egzemplarz",List.of(
+                                new SimpleStep("Bibliotekarz wybiera opcję dodania egzemplarza."),
+                                new SimpleStep("System prosi o podanie danych egzemplarza."),
+                                new SimpleStep("Bibliotekarz podaje dane egzemplarza i zatwierdza."),
+                                new SimpleStep("System informuje o poprawnym dodaniu egzemplarza i prezentuje zaktualizowaną listę egzemplarzy.")
+                        )),
+                        new ConditionalStep(ConditionalStep.ConditionalType.ELSE, "Marek Marek", List.of(
+                                new SimpleStep("elo elo"),
+                                new SimpleStep("maro maro")
+                        ))
+                )),
+                new SimpleStep("Bibliotekarz zatwierdza dodanie książki."),
+                new SimpleStep("System informuje o poprawnym dodaniu książki.")
+        ));
+
+        CondStepCounterController condStepCounterController = new CondStepCounterController();
+
+        List<String> result = condStepCounterController.countConditionalSteps(scenario);
+        List<String> expected = List.of(keywordPhrase+3, conditionalPhrase+2);
+        assertEquals(expected,result);
+    }
+
+    // mock
     @Test
     void testCountConditionalStepsMockJsonString() {
         String j = "{\"title\":\"\",\"actors\":{\"external\":[],\"system\":[\"System\"]},\"steps\":[]}";
@@ -75,6 +112,7 @@ class CondStepCounterControllerTest {
         assertEquals(expected,result);
     }
 
+    // mock
     @Test
     void testCountConditionalStepsInvalidJsonString() {
         String j = "invalid";
