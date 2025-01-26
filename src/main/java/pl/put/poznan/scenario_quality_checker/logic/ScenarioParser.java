@@ -23,7 +23,7 @@ public class ScenarioParser {
 
         Scenario scenario = createScenarioFromData(rawData);
 
-        logger.info("Załadowano scenariusz z tytułem: {}", scenario.getTitle());
+        logger.info("Załadowano z pliku scenariusz z tytułem: {}", scenario.getTitle());
         logger.info("Aktorzy zewnętrzni: {}", String.join(", ", parseActors(scenario.getExternalActors())));
         logger.info("Aktorzy systemowi: {}", String.join(", ", parseActors(scenario.getSystemActors())));
 
@@ -50,12 +50,13 @@ public class ScenarioParser {
         logger.info("Liczba wszystkich kroków warunkowych: {}", conditionCounter.countConditionalSteps(scenario));
 
         // Walidacja kroków bez aktora
-        List<String> invalidSteps = StepActorValidator.findStepsWithoutActors(scenario);
+        StepActorValidator stepActorValidator = new StepActorValidator(scenario);
+        List<String> invalidSteps = stepActorValidator.findStepsWithoutActors();
         if (invalidSteps.isEmpty()) {
             logger.info("Wszystkie kroki zaczynają się od aktora.");
         } else {
             logger.warn("Kroki bez aktora:");
-            invalidSteps.forEach(step -> logger.warn(step));
+            invalidSteps.forEach(logger::warn);
         }
 
         return scenario;

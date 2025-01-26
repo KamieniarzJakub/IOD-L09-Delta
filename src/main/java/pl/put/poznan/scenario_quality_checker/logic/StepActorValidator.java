@@ -27,22 +27,29 @@ public class StepActorValidator implements StepVisitor {
     private String currentPrefix;
 
     /**
-     * Konstruktor klasy.
-     * Inicjalizuje listy aktorów oraz kroki niepoprawne.
-     *
-     * @param externalActors lista aktorów zewnętrznych
-     * @param systemActors lista aktorów systemowych
+     * Lista wszystkich kroków scenariusza
      */
-    public StepActorValidator(List<Actor> externalActors, List<Actor> systemActors) {
+    private List<Step> steps;
+
+    /**
+     * Konstruktor klasy.
+     * Inicjalizuje listy aktorów oraz listę wszystkich kroków.
+     * Nie inicjalizuje listy niepoprawnych kroków.
+     *
+     * @param scenario obiekt scenariusza do sprawdzenia
+     */
+    public StepActorValidator(Scenario scenario){
         this.actorNames = new ArrayList<>();
-        this.actorNames.addAll(externalActors.stream().map(Actor::getName).collect(Collectors.toList()));
-        this.actorNames.addAll(systemActors.stream().map(Actor::getName).collect(Collectors.toList()));
+        this.actorNames.addAll(scenario.getExternalActors().stream().map(Actor::getName).collect(Collectors.toList()));
+        this.actorNames.addAll(scenario.getSystemActors().stream().map(Actor::getName).collect(Collectors.toList()));
+        this.steps = scenario.getSteps();
         this.invalidSteps = new ArrayList<>();
         this.currentPrefix = "";
     }
 
     /**
      * Zwraca listę niepoprawnych kroków.
+     * Nie przeszukuje listy kroków, wyłącznie zwraca obecnie zapisaną wartość.
      *
      * @return lista kroków bez aktorów
      */
@@ -53,13 +60,11 @@ public class StepActorValidator implements StepVisitor {
     /**
      * Znajduje kroki bez aktorów w scenariuszu.
      *
-     * @param scenario obiekt scenariusza do sprawdzenia
      * @return lista opisów niepoprawnych kroków
      */
-    public static List<String> findStepsWithoutActors(Scenario scenario) {
-        StepActorValidator validator = new StepActorValidator(scenario.getExternalActors(), scenario.getSystemActors());
-        validateStepsWithVisitor(scenario.getSteps(), "", validator);
-        return validator.getInvalidSteps();
+    public List<String> findStepsWithoutActors() {
+        validateStepsWithVisitor(steps, "");
+        return getInvalidSteps();
     }
 
     /**
@@ -67,15 +72,14 @@ public class StepActorValidator implements StepVisitor {
      *
      * @param steps lista kroków do sprawdzenia
      * @param prefix prefiks określający numerację kroków
-     * @param validator obiekt walidatora
      */
-    private static void validateStepsWithVisitor(List<Step> steps, String prefix, StepActorValidator validator) {
+    private void validateStepsWithVisitor(List<Step> steps, String prefix) {
         if (steps == null) return;
 
         int stepCounter = 1;
         for (Step step : steps) {
-            validator.currentPrefix = prefix.isEmpty() ? String.valueOf(stepCounter) : prefix + "." + stepCounter;
-            step.accept(validator);
+            currentPrefix = prefix.isEmpty() ? String.valueOf(stepCounter) : prefix + "." + stepCounter;
+            step.accept(this);
             stepCounter++;
         }
     }
@@ -97,7 +101,7 @@ public class StepActorValidator implements StepVisitor {
      * @param step krok warunkowy do sprawdzenia
      */
     public void visit(ConditionalStep step) {
-        validateStepsWithVisitor(step.getSteps(), currentPrefix, this);
+        validateStepsWithVisitor(step.getSteps(), currentPrefix);
     }
 
     /**
@@ -106,7 +110,7 @@ public class StepActorValidator implements StepVisitor {
      * @param step krok iteracyjny do sprawdzenia
      */
     public void visit(IterativeStep step) {
-        validateStepsWithVisitor(step.getSteps(), currentPrefix, this);
+        validateStepsWithVisitor(step.getSteps(), currentPrefix);
     }
 
     /**
