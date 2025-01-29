@@ -8,12 +8,25 @@ import pl.put.poznan.scenario_quality_checker.logic.ScenarioObjects.Scenario;
 import pl.put.poznan.scenario_quality_checker.logic.ScenarioObjects.Step;
 
 import java.io.IOException;
-
+/**
+ * Serializator scenariusza do formatu JSON.
+ */
 public class ScenarioSerializer extends JsonSerializer<Scenario> {
+
+    /**
+     * Konstruktor domyślny.
+     */
     public ScenarioSerializer() {
         super();
     }
-
+    /**
+     * Serializuje obiekt {@link Scenario} do formatu JSON.
+     *
+     * @param scenario Scenariusz do serializacji.
+     * @param jsonGenerator Generator JSON do zapisu danych.
+     * @param serializerProvider Provider serializera.
+     * @throws IOException Jeśli wystąpi błąd podczas serializacji.
+     */
     @Override
     public void serialize(Scenario scenario, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
         jsonGenerator.writeStartObject();
