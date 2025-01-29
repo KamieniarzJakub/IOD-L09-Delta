@@ -3,9 +3,17 @@ package pl.put.poznan.scenario_quality_checker.logic;
 
 import pl.put.poznan.scenario_quality_checker.logic.ScenarioObjects.*;
 
+/**
+ * Klasa odpowiedzialna za liczenie kroków warunkowych w scenariuszu.
+ */
 public class ConditionalStepCounter {
 
-    // Metoda główna licząca kroki warunkowe w scenariuszu
+    /**
+     * Liczy liczbę kroków warunkowych w danym scenariuszu.
+     *
+     * @param scenario Scenariusz, w którym będą liczone kroki warunkowe.
+     * @return Liczba znalezionych kroków warunkowych.
+     */
     public int countConditionalSteps(Scenario scenario) {
         if (scenario == null || scenario.getSteps() == null) {
             return 0;
@@ -13,7 +21,12 @@ public class ConditionalStepCounter {
         return countConditionalStepsInList(scenario.getSteps());
     }
 
-    // Metoda pomocnicza licząca kroki warunkowe rekurencyjnie
+    /**
+     * Rekurencyjnie liczy kroki warunkowe w liście kroków scenariusza.
+     *
+     * @param steps Lista kroków do analizy.
+     * @return Liczba kroków warunkowych w podanych krokach.
+     */
     private int countConditionalStepsInList(java.util.List<Step> steps) {
         int count = 0;
 

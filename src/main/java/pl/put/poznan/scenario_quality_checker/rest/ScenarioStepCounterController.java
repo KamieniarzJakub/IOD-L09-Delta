@@ -12,6 +12,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Kontroler obsługujący zliczanie głównych i wszystkich kroków w scenariuszu.
+ */
 @RestController
 public class ScenarioStepCounterController {
 
@@ -43,6 +46,13 @@ public class ScenarioStepCounterController {
         return results;
     }
 
+    /**
+     * Przetwarza scenariusz dostarczony jako JSON i zwraca liczbę głównych oraz wszystkich kroków.
+     *
+     * @param jsonContent JSON zawierający scenariusz do analizy.
+     * @return Lista zawierająca informacje o liczbie głównych i wszystkich kroków.
+     * @throws RuntimeException jeśli wystąpi błąd podczas przetwarzania JSON.
+     */
     @PostMapping("/count-steps")
     public List<String> countSubSteps(@RequestBody String jsonContent) {
         try {

@@ -11,8 +11,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Kontroler obsługujący walidację kroków scenariusza pod kątem obecności aktorów.
+ */
 @RestController
 public class StepActorValidatorController {
+
     StepActorValidator stepActorValidator;
 
     public StepActorValidatorController(){
@@ -37,6 +41,13 @@ public class StepActorValidatorController {
         return results;
     }
 
+    /**
+     * Analizuje scenariusz i zwraca listę kroków, które nie mają przypisanych aktorów.
+     *
+     * @param jsonContent JSON zawierający scenariusz do analizy.
+     * @return Lista zawierająca kroki scenariusza, które nie mają aktorów.
+     * @throws RuntimeException jeśli wystąpi błąd podczas przetwarzania JSON.
+     */
     @PostMapping("/steps-without-actors")
     public List<String> getStepsWithoutActors(@RequestBody String jsonContent) {
         try {

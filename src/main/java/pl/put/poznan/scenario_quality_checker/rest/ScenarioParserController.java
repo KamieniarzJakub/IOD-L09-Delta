@@ -6,10 +6,19 @@ import pl.put.poznan.scenario_quality_checker.logic.NewScenarioParser;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Kontroler obsługujący przetwarzanie scenariusza dostarczonego w formacie JSON.
+ */
 @RestController
 public class ScenarioParserController {
 
-    // POST - w body(raw) trzeba wrzucić jsona -> tego co jest inputem
+    /**
+     * Przetwarza scenariusz dostarczony jako JSON i zwraca jego analizowaną reprezentację.
+     *
+     * @param jsonContent JSON zawierający scenariusz do analizy.
+     * @return Lista zawierająca przetworzone kroki scenariusza.
+     * @throws RuntimeException jeśli wystąpi błąd podczas przetwarzania JSON.
+     */
     @PostMapping("/parse-scenario")
     public List<String> ScenarioParser2(@RequestBody String jsonContent) {
         try {
