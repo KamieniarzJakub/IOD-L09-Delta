@@ -9,14 +9,30 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * Klasa odpowiedzialna za parsowanie scenariuszy zapisanych w formacie JSON.
+ */
 public class NewScenarioParser {
 
+    /**
+     * Parsuje listę kroków scenariusza.
+     *
+     * @param steps Lista kroków do parsowania.
+     * @return Lista sparsowanych obiektów {@link Step}.
+     */
     private static List<Step> parseSteps(List<?> steps) {
         return steps.stream()
                 .map(NewScenarioParser::parseStep)
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Parsuje pojedynczy krok scenariusza.
+     *
+     * @param step Obiekt kroku do parsowania.
+     * @return Sparsowany krok scenariusza.
+     * @throws IllegalArgumentException jeśli format kroku jest nieoczekiwany.
+     */
     private static Step parseStep(Object step) {
         if (step instanceof SimpleStep) { // Taki step już istnieje jako obiekt SimpleStep
             return (SimpleStep) step;
@@ -44,12 +60,25 @@ public class NewScenarioParser {
         throw new IllegalArgumentException("Nieoczekiwany format kroku: " + step);
     }
 
+    /**
+     * Parsuje scenariusz z ciągu JSON.
+     *
+     * @param jsonContent JSON zawierający scenariusz.
+     * @return Lista kroków scenariusza w postaci tekstowej.
+     * @throws IOException jeśli wystąpi błąd podczas parsowania JSON.
+     */
     public static List<String> parseScenarioFromString2(String jsonContent) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         Map<String, Object> rawData = mapper.readValue(jsonContent, Map.class);
         return createScenarioFromData2(rawData);
     }
 
+    /**
+     * Tworzy scenariusz na podstawie danych mapowanych z JSON.
+     *
+     * @param rawData Surowe dane scenariusza.
+     * @return Lista kroków scenariusza w postaci tekstowej.
+     */
     private static List<String> createScenarioFromData2(Map<String, Object> rawData) {
         List<String> outputLogs = new ArrayList<>();
 
@@ -82,6 +111,13 @@ public class NewScenarioParser {
         return outputLogs;
     }
 
+    /**
+     * Rekurencyjnie wypisuje kroki scenariusza.
+     *
+     * @param steps Lista kroków do wypisania.
+     * @param prefix Prefiks numeracji kroków.
+     * @param outputLogs Lista logów wynikowych.
+     */
     private static void printSteps2(List<Step> steps, String prefix, List<String> outputLogs) {
         if (steps == null) return;
 
@@ -105,6 +141,12 @@ public class NewScenarioParser {
         }
     }
 
+    /**
+     * Parsuje listę aktorów do ich nazw tekstowych.
+     *
+     * @param actors Lista aktorów.
+     * @return Lista nazw aktorów.
+     */
     private static List<String> parseActors2(List<Actor> actors) {
         return actors.stream().map(Actor::getName).collect(Collectors.toList());
     }

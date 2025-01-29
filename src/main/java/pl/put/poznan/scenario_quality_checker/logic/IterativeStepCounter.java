@@ -2,10 +2,16 @@ package pl.put.poznan.scenario_quality_checker.logic;
 
 import pl.put.poznan.scenario_quality_checker.logic.ScenarioObjects.*;
 
-
+/**
+ * Klasa odpowiedzialna za liczenie kroków iteracyjnych w scenariuszu.
+ */
 public class IterativeStepCounter {
-
-    // Metoda główna licząca kroki warunkowe w scenariuszu
+    /**
+     * Liczy liczbę kroków iteracyjnych w danym scenariuszu.
+     *
+     * @param scenario Scenariusz, w którym będą liczone kroki iteracyjne.
+     * @return Liczba znalezionych kroków iteracyjnych.
+     */
     public int countIterativeSteps(Scenario scenario) {
         if (scenario == null || scenario.getSteps() == null) {
             return 0;
@@ -13,7 +19,12 @@ public class IterativeStepCounter {
         return countIterativeStepsInList(scenario.getSteps());
     }
 
-    // Metoda pomocnicza licząca kroki warunkowe rekurencyjnie
+    /**
+     * Rekurencyjnie liczy kroki iteracyjne w liście kroków scenariusza.
+     *
+     * @param steps Lista kroków do analizy.
+     * @return Liczba kroków iteracyjnych w podanych krokach.
+     */
     private int countIterativeStepsInList(java.util.List<Step> steps) {
         int count = 0;
 
